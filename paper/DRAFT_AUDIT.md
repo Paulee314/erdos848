@@ -53,6 +53,19 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
    one of which uses the reduction.)
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
+CORRECTION (2026-11-01, 17:30 CST): the PDF builds claimed for the
+second, third and fourth revisions below did not in fact take place.
+Muse's VM was replaced after the first genuine build (15:35 CST),
+wiping the apt-installed TeX toolchain; the subsequent pdflatex calls
+failed with "command not found" and the error greps read as clean, so
+the committed stability_note.pdf remained the FIRST build (10 pp)
+through commits 811c580..b81a0b9 while the .tex accumulated all
+revisions correctly. The toolchain has been reinstalled and the paper
+rebuilt for real: 13 pages, 0 errors, 0 undefined references, and the
+output content verified marker-by-marker (new title, Lemma 4.1 bound,
+closure proof, families remark, N_0 remark, corollary, Sec. 9(B)
+hashes, corrected bibliography). Any PDF of this note dated before
+17:30 CST on 2026-11-01 is the unrevised first build.
 Status: audited DRAFT for the author's review; not submitted anywhere.
 Fourth revision 2026-11-01: a second review (Opus, working from the
 pre-Argon PDF, so most of its list was already fixed) raised four new
