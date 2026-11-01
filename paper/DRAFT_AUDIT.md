@@ -53,6 +53,10 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
    one of which uses the reduction.)
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
-Status: audited DRAFT for the author's review. Not compiled to PDF yet at
-audit time (no TeX toolchain on the auditing machine); not submitted
-anywhere.
+Status: audited DRAFT for the author's review; not submitted anywhere.
+Compiled 2026-11-01 with pdflatex after removing a stray markdown fence
+at the head of the generated file and reconciling citation keys between
+the two generation calls (Li2026 → Li; EP848 → ErdosProblem848; EP848Code
+→ LeeRepo, the repository that distributes the referee materials):
+clean build, 10 pages, no errors or undefined references.
+`stability_note.pdf` is committed alongside the source.

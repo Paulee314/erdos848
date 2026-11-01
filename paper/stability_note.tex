@@ -1,4 +1,3 @@
-```latex
 \documentclass[11pt,a4paper]{article}
 
 \usepackage{amsmath,amssymb,amsthm}
@@ -66,7 +65,7 @@ A set $A\subseteq[N]$ is \emph{admissible} if $ab+1$ is not squarefree for all $
 \end{definition}
 
 Erd\H{o}s Problem 848 (Erd\H{o}s--S\'ark\"ozy) asks whether $f(N)$ is attained by the residue class
-$\{n\le N:\ n\equiv 7\pmod{25}\}$; see \cite{EP848}. The diagonal convention $a=b$ is the one used in
+$\{n\le N:\ n\equiv 7\pmod{25}\}$; see \cite{ErdosProblem848}. The diagonal convention $a=b$ is the one used in
 Sawhney's proof \cite{Sawhney} and in Li's formalization \cite{Li}; it is essential below, since our
 argument extracts information from the non-squarefreeness of $a^2+1$ and gives nothing without it.
 
@@ -194,7 +193,7 @@ $\{7,93\}$ and $\{43,57\}$.
 There are $4\cdot 4=16$ such pairs, and for each the three conditions ($u^2+1$, $v^2+1$, $uv+1$ not
 squarefree by a local obstruction at $4$, $9$ or $25$) are decided by a direct computation modulo
 $900$. The enumeration was carried out by the author and independently by the referee of
-\cite{EP848Code}, and also checked against all actual integer pairs up to $20000$.
+\cite{LeeRepo}, and also checked against all actual integer pairs up to $20000$.
 \end{proof}
 
 \section{Types modulo $900$ and gluing}\label{sec:types}
@@ -591,7 +590,7 @@ extremal configuration in the accessible range.
 
 \paragraph{(C) Independent rebuild of Li's formalization.}
 The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
-\cite{Li2026,LiRepo}. We did not take the published build artefacts on trust. Instead we rebuilt the
+\cite{Li,LiRepo}. We did not take the published build artefacts on trust. Instead we rebuilt the
 project from source and replayed the kernel checks. Three points are worth recording.
 
 \begin{enumerate}
@@ -615,7 +614,7 @@ failures, so the proof terms were replayed by the kernel rather than merely acce
 compiler's cache.
 \end{enumerate}
 
-Thus the input we take from \cite{Li2026,LiRepo} is a machine-checked theorem whose dependency set we
+Thus the input we take from \cite{Li,LiRepo} is a machine-checked theorem whose dependency set we
 have audited, not an informal assertion.
 
 \paragraph{(D) Availability.}
@@ -630,7 +629,7 @@ together with the raw output files whose checksums are quoted in (B).
 \paragraph{Summary of logical status.}
 Theorem~\ref{thm:main} depends on: (i) the finite checks (A), each of which is an exhaustive
 enumeration over an explicitly bounded search space; (ii) the formalized result of Li
-\cite{Li2026,LiRepo}, audited as in (C); and (iii) the stability statement of Sawhney
+\cite{Li,LiRepo}, audited as in (C); and (iii) the stability statement of Sawhney
 \cite{Sawhney}. It does \emph{not} depend on the numerical range (B), which is reported as
 independent corroborating evidence.
 
@@ -640,7 +639,7 @@ independent corroborating evidence.
 \emph{Erd\H{o}s Problem 848}, Erd\H{o}s Problems database.
 \url{https://www.erdosproblems.com/848}.
 
-\bibitem{Li2026}
+\bibitem{Li}
 A.~C.~Li,
 \emph{Erd\H{o}s Problem 848: a kernel-checked proof of the exact extremal bound},
 SSRN preprint, abstract id.~7230480.
