@@ -36,16 +36,30 @@ It contains, by Paul Lee (Paulee314):
      and was reported upstream as
      [Issue #1](https://github.com/crabsatellite/erdos-848-squarefree-product/issues/1)
      (filed 2026-10-29, before the full replay below completed);
-   - with that fix, the full build completed: 39,069 jobs, exit 0
-     (`li-replay/full_build.log.gz`);
+   - with that fix, `lake build Erdos848.PaperGeneratedCertificateProvider`
+     completed: 39,069 jobs, exit 0 (`li-replay/full_build.log.gz`). All
+     30,636 `Erdos848` modules behind the final theorem were compiled from
+     source; Mathlib and its dependencies were taken from the official
+     Mathlib build cache (`lake exe cache get`, 8,418 files), not rebuilt and
+     not taken from any cache of Li's. (The two remaining project files,
+     `PublicationAxiomAudit` and `PublicationTheoremMap`, are not imported by
+     the final theorem and were not built.)
    - `Erdos848.PaperGeneratedCertificateProvider.all_N` was checked against
      a transcription of #848 written purely with Mathlib `Squarefree`
      (`li-replay/check_all_N.lean`), depending only on
      `[propext, Classical.choice, Quot.sound]`
      (`li-replay/final_check.log`);
-   - a standalone `leanchecker` replay of all 30,636 modules in the import
-     closure finished 2026-11-01T17:32:06Z with 0 failures, 0 problems
-     (`li-replay/leanchecker_finished.txt`);
+   - `leanchecker` (the toolchain's re-checker, formerly lean4checker: it
+     re-runs every declaration of a compiled module through the Lean kernel,
+     so it catches anything that bypassed the kernel during elaboration; it
+     uses the same kernel, so it is not an independent kernel) replayed all
+     30,636 `Erdos848` modules and finished 2026-11-01T17:32:06Z with
+     0 failures and 0 problems. Mathlib was not replayed. It was run as one
+     call per namespace group (624 groups, at most two at a time); every
+     group log ends with `exit=0`, contains no "found a problem" line, and
+     lists every module of its group as replayed
+     (`li-replay/leanchecker/`: `groups.tsv`, `group_logs.tgz`, the runner
+     `lc_groups_v3b.py` and `lc_one.sh`, `all_modules.txt.gz`);
    - manifest audit: 30,735 of 30,736 files match Li's
      `PUBLICATION_MANIFEST.json` by SHA-256; only the patched file differs
      (`li-replay/integrity_report.json`).
@@ -84,7 +98,29 @@ MD5s (`out1e7`): global `e5b8573a`, deltas `e3330948` — see
 - `cert/` — certificate generator, independent checker, results, and the
   $10^7$ certificate archive.
 - `li-replay/` — the 2-line patch, manifest/integrity reports, statement
-  check, and build/kernel-replay logs for Li's proof.
+  check, build log, and (`li-replay/leanchecker/`) the kernel-replay runner,
+  per-group results and logs for Li's proof.
 - `forum/forum-post.md` — draft post for erdosproblems.com/848 (not yet
   posted; one wording change from the UPDATE draft: "referee-checked
   claim", not "proof", in the introduction).
+
+Some documents cite paths from the working folder on the author's machine
+(`final/`, `leanchecker/`, `diag/`, `review/`, `fable/`); in this repository
+the corresponding files are in `li-replay/` and `stability/`. The referee's
+other files, the Argon review and the Fable notes are not included.
+
+## Credits and AI use
+
+Paul Lee directed this work and made the decisions. Much of the computation,
+code and writing was done with AI models, which are named where they
+contributed:
+
+- **Claude** (Anthropic): the source rebuild of Li's repository, the
+  diagnosis of the build stall and the 2-line fix, the manifest and
+  escape-hatch scan, the statement and axiom check (`check_all_N.lean`), and
+  the `leanchecker` replay and its runner.
+- **Muse**: the independent audit (`AUDIT_MEMO_2026-11-01.md`).
+- Other reviewers (a separate referee agent, Argon, Fable, Gemini) are named
+  in the documents where their work appears.
+
+Corrections are welcome as GitHub issues.
