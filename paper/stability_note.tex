@@ -266,15 +266,21 @@ Let $T\ge 7$ and let $E$ be either of the events $P_b$, $D\wedge P_b$. For a fix
 the count $\#\{a\le N:\ a\equiv s\ (M),\ E(a)\}$ differs from the corresponding count with all
 witnessing primes restricted to $q\le T$ by at most
 \[
- 2\sum_{T<q\le N}\Bigl(\frac{N}{q^2}+1\Bigr)\ \le\ \frac{2N}{T}+2\pi(N),
+ 3\sum_{T<q\le N}\Bigl(\frac{N}{Mq^2}+1\Bigr)\ \le\ \frac{3N}{MT}+3\pi(N),
 \]
 and the truncated count is an exact CRT count $\mathrm{dens}_T\cdot N/M+O_T(1)$. Only primes $q\le N$
 need be considered, since $q^2\le ab+1\le N^2+1$.
 \end{lemma}
 
+Indeed, if $E(a)$ holds while its $T$-truncation fails, some prime $q>T$ witnesses $D(a)$ or
+$P_b(a)$: the first alternative puts $a$ in two residue classes mod $q^2$ when $q\in\Dset$ (and is
+impossible for $q\notin\Dset$), the second in a single class, so at most three classes mod $q^2$ in
+all. Since $q\ge 7$ is coprime to $M$, each such class meets the fixed class $s$ mod $M$ in a single
+class mod $Mq^2$, which contains at most $N/(Mq^2)+1$ integers in $[N]$.
+
 Given $\varepsilon>0$ we first choose $T=T(\varepsilon)$ so that the truncated CRT densities are within
-$\varepsilon/2$ of their limits and $2/T<\varepsilon/4$, and then $N_0$ so that
-$2\pi(N)+O_T(1)<\varepsilon N/4$ for $N\ge N_0$. All constants below are limits of truncated products,
+$\varepsilon/2$ of their limits and $3/T<\varepsilon/4$, and then $N_0$ so that
+$3\pi(N)+O_T(1)<\varepsilon N/(4M)$ for $N\ge N_0$. All constants below are limits of truncated products,
 and only upper bounds on them are used.
 
 \begin{lemma}[The $K_2'$ cap]\label{lem:K2}
@@ -462,12 +468,28 @@ Galois-closed. There are exactly $64$ Galois-closed signature sets, and exactly 
 satisfying the compatibility constraints.
 \end{lemma}
 
-% TODO(author): the closure reduction is stated by the independent referee and implemented in
-% opt_closure.py (which verifies R(R(X)) = X for each enumerated closed set and cross-validates
-% F against its definition on all 900 types, including 3000 random type sets); a written-out
-% proof of the reduction is not present in the source material and should be supplied in a final
-% version. The computational conclusions of Theorem 6.2 below were obtained by three independent
-% solvers, only one of which uses the reduction.
+\begin{proof}
+Let $(G_7, G_{18}, Y)$ be a configuration in $\Sigma$, so $G_{18} \cup Y$ and $G_7 \cup Y$ are both
+nonempty. Write $W_7 = G_7 \cap R(G_{18} \cup Y)$ and $W_{18} = G_{18} \cap R(G_7 \cup Y)$ for the
+signature sets receiving weight $1$ on each side, and set $A = R(W_{18})$ and $B = R(W_7)$, which
+are Galois-closed. Every $i \in G_7$ is $R$-related to each $w \in W_{18} \subseteq G_{18}$, since
+$w \in R(G_7 \cup Y)$ means $w$ is glued to every signature in $G_7 \cup Y$; by symmetry of $R$ this
+gives $G_7 \subseteq A$, and the same argument gives $G_{18} \subseteq B$ and $Y \subseteq A \cap B$.
+Antitonicity of $R$ then yields $R(A) \subseteq R(G_7) \subseteq R(W_7) = B$, so $(A, B)$ is a
+compatible pair of closed sets, and $A \cap B$ is closed as an intersection of closed sets. In the
+replacement configuration $(A, B, A \cap B)$ the weight-$1$ set on the $7$-side is
+$A \cap R(B \cup (A \cap B)) = A \cap R(B) \supseteq W_7$, because $R(B) = R(R(W_7)) \supseteq W_7$
+and $W_7 \subseteq G_7 \subseteq A$; likewise on the $18$-side. Hence the replacement enlarges
+$G_7$, $G_{18}$, $Y$ and both weight-$1$ sets, and every added signature carries positive weight
+($K_2' > 0$ for class signatures, $23J' > 0$ for non-$C$ signatures), so $F$ does not decrease.
+Therefore the maximum of $F$ over $\Sigma$ is attained at a configuration whose governing signature
+sets are Galois-closed.
+\end{proof}
+
+% Note: the enumeration behind the count above is implemented in opt_closure.py (which verifies
+% R(R(X)) = X for each enumerated closed set and cross-validates F against its definition on all
+% 900 types, including 3000 random type sets). The computational conclusions of Theorem 6.2 below
+% were obtained by three independent solvers, only one of which uses the reduction.
 
 \subsection{The computation and its outcome}
 

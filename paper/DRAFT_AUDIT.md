@@ -54,6 +54,15 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
 Status: audited DRAFT for the author's review; not submitted anywhere.
+Revision 2026-11-01 (post-review): an independent review (Argon) found,
+and Muse verified, a genuine gap in Lemma 4.1 as drafted — the tail bound
+needs coefficient 3 (a large prime can witness D in two classes or P_b in
+one) and class-relative scaling N/(Mq^2); the lemma and its error-budget
+paragraph are patched accordingly (conclusions unchanged). The same review
+supplied a proof of the closure reduction (Lemma 6.1), verified by Muse
+against the section's definitions and now included in the paper; that
+TODO gap is closed. Remaining TODOs in the source: effective N_0 and
+Sawhney's full bibliographic data.
 Compiled 2026-11-01 with pdflatex after removing a stray markdown fence
 at the head of the generated file and reconciling citation keys between
 the two generation calls (Li2026 → Li; EP848 → ErdosProblem848; EP848Code
