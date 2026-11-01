@@ -1,0 +1,674 @@
+```latex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Dset}{\mathcal{D}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{A sharp stability threshold for Erd\H{o}s Problem 848:\\
+admissible sets meeting both extremal classes\\
+have density at most $1/50$}
+\author{Paul J.\ Lee}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Call $A\subseteq\{1,\dots,N\}$ \emph{admissible} if $ab+1$ is not squarefree for all $a,b\in A$,
+including $a=b$. A.~C.~Li has determined the maximum size $f(N)=\lfloor (N+18)/25\rfloor$ of an
+admissible set for every $N$, in a Lean-formalized proof which we take as an input; the extremal sets
+are the residue classes $n\equiv 7 \pmod{25}$ and $n\equiv 18\pmod{25}$. Sawhney had previously proved a
+stability statement: there is an (unspecified) $\eta>0$, implicitly $\eta\approx 0.0023$, such that for
+large $N$ every admissible set of size at least $(1/25-\eta)N$ lies inside one of these two classes;
+he left open the structure of admissible sets of smaller density. We close that gap in sharp form.
+We prove that for every $\varepsilon>0$ and all $N\ge N_0(\varepsilon)$, every admissible
+$A\subseteq\{1,\dots,N\}$ which is \emph{not} contained in a single one of the two classes satisfies
+$|A|\le (1/50+\varepsilon)N$, and that the constant $1/50$ is sharp, attained exactly by the two
+residue-class constructions $\{n:\ n\equiv 7,93 \pmod{100}\}$ and $\{n:\ n\equiv 43,57\pmod{100}\}$.
+The proof combines uniform analytic density bounds for the relevant squarefree-sieve events with two
+explicit finite computations, both described in the paper: the determination of the divisibility
+(``gluing'') relation on residues modulo $900$, and the maximization of the resulting weighted
+objective by $0$--$1$ programming together with an exhaustive enumeration over the $64$ Galois-closed
+signature sets. No explicit $N_0$ is claimed.
+\end{abstract}
+
+\section{Introduction}
+
+\subsection{The problem}
+
+For $N\in\N$ write $[N]=\{1,2,\dots,N\}$.
+
+\begin{definition}\label{def:adm}
+A set $A\subseteq[N]$ is \emph{admissible} if $ab+1$ is not squarefree for all $a,b\in A$,
+\emph{including the diagonal case $a=b$}. We write
+\[
+ f(N)=\max\{|A|:\ A\subseteq[N]\ \text{admissible}\}.
+\]
+\end{definition}
+
+Erd\H{o}s Problem 848 (Erd\H{o}s--S\'ark\"ozy) asks whether $f(N)$ is attained by the residue class
+$\{n\le N:\ n\equiv 7\pmod{25}\}$; see \cite{EP848}. The diagonal convention $a=b$ is the one used in
+Sawhney's proof \cite{Sawhney} and in Li's formalization \cite{Li}; it is essential below, since our
+argument extracts information from the non-squarefreeness of $a^2+1$ and gives nothing without it.
+
+Two residue classes are admissible for trivial local reasons:
+\[
+ \mathcal{C}^{7}_N=\{n\le N:\ n\equiv 7\ (25)\},\qquad
+ \mathcal{C}^{18}_N=\{n\le N:\ n\equiv 18\ (25)\},
+\]
+because $7\cdot 7+1=50$, $18\cdot 18+1=325$ and $7\cdot 18+1=127$ are such that $25\mid ab+1$ whenever
+$a\equiv b\equiv 7\ (25)$ or $a\equiv b\equiv 18\ (25)$. (Note that $25\nmid 127$: the two classes are
+\emph{not} glued to each other by $25$. This will matter.) We call these the two
+\emph{extremal classes}.
+
+\subsection{Inputs: Li's theorem and Sawhney's stability theorem}
+
+\begin{theorem}[A.~C.~Li \cite{Li}]\label{thm:li}
+For every $N\ge 1$,
+\[
+ f(N)=\bigl|\{n\le N:\ n\equiv 7\ (\mathrm{mod}\ 25)\}\bigr|=\Bigl\lfloor \frac{N+18}{25}\Bigr\rfloor .
+\]
+\end{theorem}
+
+Theorem~\ref{thm:li} is proved in \cite{Li} by an exact prefix colouring for $N\le 5\cdot 10^{6}$
+combined with a Hall-defect sieve argument for larger $N$, and is formalized in Lean~4 in the
+accompanying repository. It is an \emph{input} to the present note: we neither reprove nor modify it.
+(Section~\ref{sec:verif} records an independent source rebuild and external kernel replay of that
+formalization, performed by the present author; that work verifies Li's theorem and is logically
+separate from the theorem proved here.)
+
+\begin{theorem}[Sawhney \cite{Sawhney}]\label{thm:sawhney}
+There is $\eta>0$ such that for all sufficiently large $N$, every admissible $A\subseteq[N]$ with
+$|A|\ge (1/25-\eta)N$ satisfies $A\subseteq \mathcal{C}^{7}_N$ or $A\subseteq \mathcal{C}^{18}_N$.
+\end{theorem}
+
+Sawhney does not specify $\eta$; his four case bounds are
+$0.0377N$, $0.0358N$, $0.0336N$, $0.0294N$ (each $+o(N)$), so that $\eta\approx 0.0023$ is implicit.
+He explicitly leaves open ``a strong structural classification of sets $A$ with size $\delta N$''.
+Thus before the present note, the structure of admissible sets was understood only in the top
+sliver of densities, $|A|/N\in[1/25-0.0023,\ 1/25]$, and nothing was known in the whole middle range
+below it.
+
+\subsection{Main theorem}
+
+\begin{theorem}\label{thm:main}
+For every $\varepsilon>0$ there is $N_0(\varepsilon)$ such that the following holds for all
+$N\ge N_0(\varepsilon)$. If $A\subseteq[N]$ is admissible and $A$ is \emph{not} contained in
+$\mathcal{C}^{7}_N$ and \emph{not} contained in $\mathcal{C}^{18}_N$, then
+\[
+ |A|\ \le\ \Bigl(\frac{1}{50}+\varepsilon\Bigr)N .
+\]
+Equivalently: every admissible set with more than $(1/50+\varepsilon)N$ elements lies inside one
+of the two extremal classes. The constant $1/50$ is sharp: it is attained, within the mod-$900$
+type framework of Section~\ref{sec:opt} and up to $O(1)$ errors, by exactly two residue-class
+constructions,
+\[
+ A_1=\{n\le N:\ n\equiv 7\ \text{or}\ 93\ (\mathrm{mod}\ 100)\},\qquad
+ A_2=\{n\le N:\ n\equiv 43\ \text{or}\ 57\ (\mathrm{mod}\ 100)\},
+\]
+both of which are admissible, meet both extremal classes, and have $|A_i|=N/50+O(1)$.
+\end{theorem}
+
+Combined with Theorem~\ref{thm:li}, the picture for large $N$ is therefore complete up to
+$\varepsilon$: an admissible set either sits inside one extremal class (where its size is at most
+$\lfloor (N+18)/25\rfloor$, with equality for the class itself), or it has density at most
+$1/50+\varepsilon$, and the latter bound is attained.
+
+\begin{remark}[Ineffectivity]\label{rem:ineff}
+No explicit $N_0(\varepsilon)$ is claimed anywhere in this note. The density bounds of
+Section~\ref{sec:dens} are stated in an $\varepsilon$--$T$--$N_0$ form in which the truncation
+parameter $T=T(\varepsilon)$ and then $N_0$ are chosen but not tracked, and the large-prime error
+terms are handled exactly as in Sawhney's argument \cite{Sawhney}, which we take as given and do not
+re-derive. In this sense $N_0(\varepsilon)$ is ineffective as stated here, and it inherits the
+ineffectivity of the inputs \cite{Li,Sawhney} in the surrounding discussion.
+% TODO(author): an effective N_0 would require tracking T(eps), the tail sum over primes q > T, and
+% the O_T(1) CRT error; none of the source material does this.
+\end{remark}
+
+\begin{remark}[Prior work and what is new]\label{rem:prior}
+The observation that the residues $7$ and $93$ modulo $100$ are compatible ``through $4$'', because
+$7\cdot 93+1=652=4\cdot 163$, is due to \textbf{AstroCat93} \cite{AstroCat}, whose verification write-up
+also isolates a sub-case of limiting density $0.02$; its overall bound is $\approx 0.0282$. That work
+does not show that density $1/50$ is \emph{attained} by an admissible set, and does not establish
+$1/50$ as the global stability threshold. What is new here is (i) the proof that the full
+configuration $\{7,93\}\pmod{100}$ (and its mirror $\{43,57\}\pmod{100}$) is admissible and attains
+density exactly $1/50$, and (ii) the matching sharp upper bound of Theorem~\ref{thm:main}, obtained by
+reducing all mixed configurations to the single numerical inequality $72K_2'+828J'<18$ of
+Section~\ref{sec:opt}. Other community bounds in circulation are weaker: $\approx 0.0276$
+(bzanghi/erdos-848) and an existential $\eta=1/2000$ in the Lean work of
+The-Obstacle-Is-The-Way/erdos-banger. A novelty search carried out on 27 October 2026 found neither
+the $1/50$ threshold nor the two constructions stated anywhere; a few sources (notably
+\S IV.1 of arXiv:2511.16072, and some raw forum material) were not read in full.
+\end{remark}
+
+\section{The extremal configurations}\label{sec:extremal}
+
+\begin{proposition}\label{prop:extremal}
+The sets $A_1=\{n\le N:\ n\equiv 7,93\ (100)\}$ and $A_2=\{n\le N:\ n\equiv 43,57\ (100)\}$ are
+admissible, each meets both extremal classes, and $|A_i|=N/50+O(1)$.
+\end{proposition}
+
+\begin{proof}
+Diagonal and within-residue pairs. If $a\equiv b\equiv 7\ (100)$ then $ab+1\equiv 50\ (100)$, so
+$25\mid ab+1$; in particular $7^2+1=50$. If $a\equiv b\equiv 93\ (100)$ then again
+$ab+1\equiv 93\cdot 93+1=8650\equiv 50\ (100)$, and $8650=2\cdot 5^2\cdot 173$, so $25\mid ab+1$.
+Cross pairs. If $a\equiv 7$ and $b\equiv 93\ (100)$ then $ab+1\equiv 7\cdot 93+1=652\equiv 52\ (100)$,
+so $4\mid ab+1$ (indeed $652=2^2\cdot 163$). In all cases $ab+1$ is divisible by $25$ or by $4$, hence
+not squarefree, so $A_1$ is admissible.
+
+For $A_2$: $43^2+1=1850=2\cdot 5^2\cdot 37$ and $57^2+1=3250=2\cdot 5^3\cdot 13$ are both divisible by
+$25$, so within-residue pairs give $ab+1\equiv 50\ (100)$; and $43\cdot 57+1=2452\equiv 52\ (100)$ is
+divisible by $4$. So $A_2$ is admissible.
+
+Finally $7\equiv 7$ and $93\equiv 18\ (25)$, while $43\equiv 18$ and $57\equiv 7\ (25)$; so each $A_i$
+meets both extremal classes and is contained in neither. Each $A_i$ consists of two residue classes
+mod $100$, whence $|A_i|=2N/100+O(1)=N/50+O(1)$.
+\end{proof}
+
+\begin{proposition}[Finite check]\label{prop:only-two}
+Among all pairs $\{u,v\}$ of residues mod $100$ with $u\equiv 7$, $v\equiv 18\pmod{25}$ (or vice
+versa), the only pairs for which $\{n\le N:\ n\equiv u\ \text{or}\ v\ (100)\}$ is admissible are
+$\{7,93\}$ and $\{43,57\}$.
+\end{proposition}
+
+\begin{proof}
+There are $4\cdot 4=16$ such pairs, and for each the three conditions ($u^2+1$, $v^2+1$, $uv+1$ not
+squarefree by a local obstruction at $4$, $9$ or $25$) are decided by a direct computation modulo
+$900$. The enumeration was carried out by the author and independently by the referee of
+\cite{EP848Code}, and also checked against all actual integer pairs up to $20000$.
+\end{proof}
+
+\section{Types modulo $900$ and gluing}\label{sec:types}
+
+Throughout, set
+\[
+ M=900=4\cdot 9\cdot 25 .
+\]
+The \emph{type} of an integer $n$ is its residue $n\bmod M$. Let
+\[
+ \Dset=\{p\ \text{prime}:\ p\equiv 1\ (\mathrm{mod}\ 4),\ p\ge 13\}.
+\]
+For integers $a,b$ define the two sieve events
+\[
+ D(a):\ \exists p\in\Dset,\ p^2\mid a^2+1;\qquad
+ P_b(a):\ \exists q\ \text{prime},\ q\ge 7,\ q^2\mid ab+1 .
+\]
+
+\begin{lemma}[Local facts; finite verification]\label{lem:F1}
+\begin{enumerate}
+\item[(F1)] For every $n$, $n^2+1$ is divisible by neither $4$ nor $9$; it is divisible by $25$ if and
+only if $n\equiv 7$ or $18\pmod{25}$; no prime $p\equiv 3\pmod 4$ divides $n^2+1$; and for
+$p\equiv 1\pmod 4$ the congruence $x^2\equiv -1\pmod{p^2}$ has exactly two roots. Consequently, if
+$n\bmod 25\notin\{7,18\}$, then
+\[
+ n^2+1\ \text{is not squarefree}\iff D(n).
+\]
+\item[(F2)] Whether $4$, $9$ or $25$ divides $ab+1$ depends only on the types of $a$ and $b$. Call a
+pair of types $(s,t)$ \emph{glued} if $4\mid st+1$ or $9\mid st+1$ or $25\mid st+1$. If $(s,t)$ is not
+glued, then for $a$ of type $s$ and $b$ of type $t$,
+\[
+ ab+1\ \text{is not squarefree}\iff P_b(a),
+\]
+and necessarily $q\nmid b$ for the witnessing prime $q$.
+\item[(F3)] Let $C\subseteq\Z/M\Z$ be the set of $72$ types $s$ with $s\equiv 7$ or $18\pmod{25}$.
+Every $s\in C$ is glued to itself and to every type in the same class mod $25$. A type outside $C$ is
+never glued to itself. A type in $C$ and a type outside $C$ can be glued only through $4$ or $9$;
+likewise a $7$-class type and an $18$-class type can be glued only through $4$ or $9$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(F1) Squares mod $4$ lie in $\{0,1\}$ and squares mod $9$ in $\{0,1,4,7\}$, so $n^2+1\not\equiv 0$
+mod $4$ or $9$. The roots of $x^2\equiv-1\pmod{25}$ are $x\equiv 7,18$. If $p\equiv 3\pmod 4$ then
+$-1$ is a non-residue mod $p$. If $p\equiv 1\pmod 4$, Hensel lifting gives exactly two roots mod
+$p^2$. Hence, for $n$ with $n\bmod 25\notin\{7,18\}$, the only primes whose square can divide $n^2+1$
+are $p\equiv 1\pmod 4$ with $p\ne 5$, i.e.\ $p\in\Dset$.
+
+(F2) The first assertion is clear since $4,9,25\mid M$. If $(s,t)$ is not glued, then $4,9,25\nmid
+ab+1$; since $2^2=4$, $3^2=9$, $5^2=25$, any prime square dividing $ab+1$ has prime $q\ge 7$. If
+$q\mid b$ and $q^2\mid ab+1$ then $q\mid 1$, a contradiction.
+
+(F3) If $s\equiv t\equiv 7\ (25)$ then $st+1\equiv 50\equiv 0\ (25)$, and similarly
+$18\cdot 18+1=325\equiv 0\ (25)$; this covers self-gluing and same-class gluing. If $s\notin C$ then
+$s^2+1$ is divisible by none of $4,9,25$ by (F1). Finally, if $25\mid st+1$ with $s\equiv 7\ (25)$ then
+$t\equiv-7^{-1}\equiv-18\equiv 7\ (25)$ (as $7\cdot 18=126\equiv 1$), so $t$ is in the same class; the
+same computation with $7$ and $18$ interchanged gives the remaining statement.
+\end{proof}
+
+The local facts were verified computationally as well: (F1) for all primes $p<2000$, (F2) on $20{,}000$
+random pairs, and (F3) on all $900\times 900$ type pairs (see Section~\ref{sec:verif}).
+
+\section{Uniform density bounds}\label{sec:dens}
+
+All bounds in this section are uniform in the ``pivot'' $b\le N$, which is what allows us to choose
+the witness $b$ depending on the set $A$.
+
+\begin{lemma}[Truncation]\label{lem:trunc}
+Let $T\ge 7$ and let $E$ be either of the events $P_b$, $D\wedge P_b$. For a fixed residue $s$ mod $M$,
+the count $\#\{a\le N:\ a\equiv s\ (M),\ E(a)\}$ differs from the corresponding count with all
+witnessing primes restricted to $q\le T$ by at most
+\[
+ 2\sum_{T<q\le N}\Bigl(\frac{N}{q^2}+1\Bigr)\ \le\ \frac{2N}{T}+2\pi(N),
+\]
+and the truncated count is an exact CRT count $\mathrm{dens}_T\cdot N/M+O_T(1)$. Only primes $q\le N$
+need be considered, since $q^2\le ab+1\le N^2+1$.
+\end{lemma}
+
+Given $\varepsilon>0$ we first choose $T=T(\varepsilon)$ so that the truncated CRT densities are within
+$\varepsilon/2$ of their limits and $2/T<\varepsilon/4$, and then $N_0$ so that
+$2\pi(N)+O_T(1)<\varepsilon N/4$ for $N\ge N_0$. All constants below are limits of truncated products,
+and only upper bounds on them are used.
+
+\begin{lemma}[The $K_2'$ cap]\label{lem:K2}
+For every $\varepsilon>0$ there is $N_0$ such that for all $N\ge N_0$, all $b\le N$ and all residues
+$s$ mod $M$,
+\[
+ \#\{a\le N:\ a\equiv s\ (M),\ P_b(a)\}\ \le\ (K_2'+\varepsilon)\frac{N}{M},
+ \qquad
+ K_2'=1-\prod_{q\ge 7}\bigl(1-q^{-2}\bigr)=1-\frac{9.375}{\pi^2}\approx 0.0501139 .
+\]
+\end{lemma}
+
+\begin{proof}
+By (F2) a witnessing prime satisfies $q\ge 7$ and $q\nmid b$; for such $q$ the condition
+$q^2\mid ab+1$ puts $a$ in a single residue class mod $q^2$, and the classes for distinct $q$ are
+independent by CRT. Hence the truncated density of $P_b$ is
+$1-\prod_{7\le q\le T,\,q\nmid b}(1-q^{-2})\le 1-\prod_{7\le q\le T}(1-q^{-2})$, and letting
+$T\to\infty$ in the majorant gives $K_2'$. Finally
+$\prod_{q\ge 7}(1-q^{-2})=\bigl(6/\pi^2\bigr)\big/\bigl(\tfrac34\cdot\tfrac89\cdot\tfrac{24}{25}\bigr)
+=9.375/\pi^2$, since $\tfrac34\cdot\tfrac89\cdot\tfrac{24}{25}=0.64$.\footnote{%
+This closed form, $K_2'=1-9.375/\pi^2$, is the correct one; an expanded product form containing a
+spurious factor $15/16$ appeared in an early draft of this note and should be disregarded.}
+Apply Lemma~\ref{lem:trunc}.
+\end{proof}
+
+\begin{lemma}[The $J'$ cap]\label{lem:J}
+Put
+\[
+ A_{\Dset}=\prod_{p\in\Dset}\bigl(1-2p^{-2}\bigr),\quad
+ B_{\Dset}=\prod_{p\in\Dset}\bigl(1-p^{-2}\bigr),\quad
+ Q=\prod_{\substack{p\equiv 3\,(4)\\ p\ge 7}}\bigl(1-p^{-2}\bigr),
+\]
+\[
+ K_1=1-A_{\Dset}\approx 0.0273465,\qquad
+ J'=K_1-Q\,\bigl(B_{\Dset}-A_{\Dset}\bigr)\approx 0.0142450 .
+\]
+Then for every $\varepsilon>0$ there is $N_0$ such that for all $N\ge N_0$, all $b\le N$ and all
+residues $s$ mod $M$ with $s\notin C$,
+\[
+ \#\{a\le N:\ a\equiv s\ (M),\ D(a)\wedge P_b(a)\}\ \le\ (J'+\varepsilon)\frac{N}{M}.
+\]
+\end{lemma}
+
+\begin{proof}
+By inclusion--exclusion, for the truncated events,
+\[
+ \mathrm{dens}\bigl(D\wedge P_b\bigr)=1-\prod_\ell Y_\ell-\prod_\ell X_\ell+\prod_\ell Z_\ell,
+\]
+where $X_\ell, Y_\ell, Z_\ell$ are the local densities at $\ell$ of $\neg P_b$, $\neg D$ and
+$\neg D\wedge\neg P_b$ respectively, and $Z_\ell\le X_\ell$ at every prime. Explicitly: for
+$\ell\in\Dset$ the set $D_\ell=\{\pm r\}$ with $r^2\equiv-1\ (\ell^2)$ has two elements mod $\ell^2$,
+and $P_\ell=\{-b^{-1}\bmod \ell^2\}$ is a single class when $\ell\nmid b$, empty when $\ell\mid b$; for
+$\ell\ge 7$, $\ell\notin\Dset$ (i.e.\ $\ell\equiv 3\ (4)$, $\ell\ge 7$) the event $D$ is locally empty.
+
+The density is a product of positive local factors, so the dependence on $b$ may be analysed one prime
+at a time, all other factors held fixed, and the signs of the two possible changes do not depend on the
+other factors:
+\begin{itemize}
+\item If $\ell\mid b$ then $P_\ell=\emptyset$, and the change in the density relative to
+$\ell\nmid b$ is $(Z'-X')/\ell^2\le 0$ if $P_\ell$ would lie outside $D_\ell$, and $-X'/\ell^2\le 0$ if
+it would lie inside, where $X',Z'$ denote the products of the remaining local factors. So
+$\gcd(b,\ell)=1$ is the worse (larger) case.
+\item If $\ell\in\Dset$ and $P_\ell\subset D_\ell$ (equivalently $\ell^2\mid b^2+1$), then $Z_\ell$
+rises from $1-3/\ell^{2}$ to $1-2/\ell^{2}$, which raises the density. So coincidence is the worse case.
+\end{itemize}
+Taking the worst case at every prime simultaneously therefore majorizes every $b$. In that worst case
+$\prod Y=A_{\Dset}$, $\prod X=Q\,B_{\Dset}=1-K_2'$ and $\prod Z=Q\,A_{\Dset}$, giving
+\[
+ 1-A_{\Dset}-Q B_{\Dset}+Q A_{\Dset}=K_1-Q\bigl(B_{\Dset}-A_{\Dset}\bigr)=J' .
+\]
+Finally $s\notin C$ guarantees, by (F1), that non-squarefreeness of $a^2+1$ is exactly the event $D(a)$,
+so the bound is applicable. Apply Lemma~\ref{lem:trunc}.
+% TODO(author): the per-prime sign computation above, together with the finite CRT-period checks
+% reported below, is exactly what the source material establishes; a fully written-out global
+% monotonicity induction over all primes is not present in the sources and should be supplied in a
+% final version.
+\end{proof}
+
+The product formula underlying Lemma~\ref{lem:J} was checked exactly against full CRT-period counts on
+the prime sets $\{7,13\}$, $\{7,13,17\}$, $\{11,13,17\}$ and $\{7,11,13\}$, in each case with the
+maximum over $b$ equal to the predicted worst case. Empirically, for $a\le 10^{7}$ and pivots
+$b\in\{1,\,30030,\,9699690,\,9999991,\,99,\,3141,\,33459226\}$ (exhibiting $0$ to $3$ coincidences
+$\ell^2\mid b^2+1$), all observed densities matched the exact per-$b$ predictions ($|z|\le 0.4$), the
+largest observed $D\wedge P_b$ density being $0.01120<J'$. Pivots with $\ge 4$ coincidences were not
+tested.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{llll}
+\toprule
+Constant & Definition & Value / enclosure \\
+\midrule
+$A_{\Dset}$ & $\prod_{p\in\Dset}(1-2p^{-2})$ & $0.9726535060$\\
+$B_{\Dset}$ & $\prod_{p\in\Dset}(1-p^{-2})$ & $0.9862566747$\\
+$Q$ & $\prod_{p\equiv 3(4),\,p\ge 7}(1-p^{-2})$ & $0.9631226050$\\
+$K_1$ & $1-A_{\Dset}$ & $\approx 0.0273465$, \ $[0.02734649,\,0.02734654]$\\
+$K_2'$ & $1-\prod_{q\ge 7}(1-q^{-2})=1-9.375/\pi^2$ & $\approx 0.0501139$, \ $[0.05011390,\,0.05011395]$\\
+$J'$ & $K_1-Q(B_{\Dset}-A_{\Dset})$ & $\approx 0.0142450$, \ $[0.01424497,\,0.01424500]$\\
+generic $b$ & density of $D\wedge P_b$, no coincidences & $\approx 0.0012774$\\
+\bottomrule
+\end{tabular}
+\caption{The density constants. Enclosures were obtained from partial products over primes up to
+$P=5\cdot 10^{7}$ with rigorous tails (using $\sum_{n>P}n^{-2}<1/(P-1)$); the author's independent
+computation used $P=2\cdot 10^{7}$ and agrees to the printed digits.}
+\label{tab:consts}
+\end{table}
+
+\section{The per-type bound}\label{sec:pertype}
+
+Let $A\subseteq[N]$ be admissible and let $S\subseteq\Z/M\Z$ be the set of types occurring in $A$. For
+$s\in S$ define the weight
+\[
+ f(s,S)=
+ \begin{cases}
+ 1, & s\in C \text{ and } s \text{ is glued to every } t\in S,\\[2pt]
+ K_2', & s\in C \text{ and some } t\in S \text{ is not glued to } s,\\[2pt]
+ J', & s\notin C .
+ \end{cases}
+\]
+
+\begin{proposition}\label{prop:pertype}
+For every $\varepsilon>0$ there is $N_0(\varepsilon)$ such that for all $N\ge N_0$ and all admissible
+$A\subseteq[N]$ with type set $S$,
+\[
+ |A|\ \le\ \frac{N}{M}\sum_{s\in S}f(s,S)\ +\ \varepsilon N\ +\ O(M).
+\]
+\end{proposition}
+
+\begin{proof}
+Write $A_s=\{a\in A:\ a\equiv s\ (M)\}$, so $|A|=\sum_{s\in S}|A_s|$. There are at most $M$ summands,
+so it suffices to bound each $|A_s|$ by $f(s,S)N/M+\varepsilon N/M+O(1)$.
+
+If $s\in C$ is glued to every $t\in S$ we use the trivial bound $|A_s|\le N/M+1$.
+
+If $s\in C$ and some $t\in S$ is not glued to $s$, pick $b\in A$ of type $t$. By (F3) a $C$-type is
+glued to itself, so $t\ne s$ and hence $b\notin A_s$. For every $a\in A_s$, $ab+1$ is not squarefree
+and $(s,t)$ is not glued, so $P_b(a)$ holds by (F2). Lemma~\ref{lem:K2} gives
+$|A_s|\le (K_2'+\varepsilon)N/M$.
+
+If $s\notin C$ and $|A_s|\ge 2$, pick $b\in A_s$. By (F3), $(s,s)$ is not glued, so every
+$a\in A_s\setminus\{b\}$ satisfies $P_b(a)$ by (F2); and $a^2+1$ is not squarefree (diagonal
+admissibility) with $s\notin C$, so $D(a)$ holds by (F1). Lemma~\ref{lem:J} gives
+$|A_s|\le 1+(J'+\varepsilon)N/M$. If $|A_s|\le 1$ its contribution is at most $1$, which is absorbed in
+the $O(M)$ term.
+\end{proof}
+
+\section{The maximization}\label{sec:opt}
+
+Set
+\[
+ F(S)=\frac{1}{M}\sum_{s\in S}f(s,S),
+\]
+and let $\Sigma$ be the family of all $S\subseteq\Z/M\Z$ that are not contained in the $7$-class and
+not contained in the $18$-class (i.e.\ $\{s\in S: s\not\equiv 7\,(25)\}\ne\emptyset$ and
+$\{s\in S: s\not\equiv 18\,(25)\}\ne\emptyset$). We must compute $\max_{S\in\Sigma}F(S)$.
+
+\subsection{Signature reduction}
+
+For $s\in\Z/M\Z$ define the \emph{signature} $\sigma(s)=(s\bmod 4,\ s\bmod 9)\in\Z/4\times\Z/9$; there
+are $36$ signatures, each containing $25$ types, of which $2$ lie in $C$ and $23$ do not. Thus $C$ has
+$72$ elements, parametrized by (class $\in\{7,18\}$, signature), and the complement of $C$ consists of
+$36$ groups of $23$ types.
+
+By (F3), gluing within a mod-$25$ class is automatic, while gluing between the two classes, and between
+a $C$-type and a non-$C$ type, can only occur through $4$ or $9$ and therefore depends only on
+signatures: define the symmetric relation
+\[
+ (a,b)\ R\ (a',b')\quad\Longleftrightarrow\quad 4\mid aa'+1\ \ \text{or}\ \ 9\mid bb'+1 .
+\]
+That $R$ computes gluing correctly in all the relevant cases was verified exhaustively over all
+$900\times 900$ type pairs. Moreover all $23$ non-$C$ types of a given signature behave identically
+towards every $C$-type (verified exhaustively), and each carries the same weight $J'$; so a
+configuration is determined, for the purposes of $F$, by
+\[
+ (G_7,\ G_{18},\ Y)\subseteq (\Z/4\times\Z/9)^3,
+\]
+the signature sets of the $7$-class types present, of the $18$-class types present, and of the non-$C$
+groups present. For a signature set $X$ write $R(X)=\bigcap_{i\in X}R(i)$ (with $R(\emptyset)$ the full
+set of $36$ signatures). A signature set is \emph{Galois-closed} if it is of the form $R(X)$,
+equivalently $R(R(X))=X$.
+
+\begin{lemma}[Closure reduction]\label{lem:closure}
+The maximum of $F$ over $\Sigma$ is attained at a configuration whose governing signature sets are
+Galois-closed. There are exactly $64$ Galois-closed signature sets, and exactly $439$ pairs of them
+satisfying the compatibility constraints.
+\end{lemma}
+
+% TODO(author): the closure reduction is stated by the independent referee and implemented in
+% opt_closure.py (which verifies R(R(X)) = X for each enumerated closed set and cross-validates
+% F against its definition on all 900 types, including 3000 random type sets); a written-out
+% proof of the reduction is not present in the source material and should be supplied in a final
+% version. The computational conclusions of Theorem 6.2 below were obtained by three independent
+% solvers, only one of which uses the reduction.
+
+\subsection{The computation and its outcome}
+
+\begin{theorem}[Computational]\label{thm:opt}
+\[
+ \max_{S\in\Sigma} F(S)=\frac{18}{900}=\frac{1}{50},
+\]
+and the maximum is attained by exactly two configurations, namely
+\[
+ S_1=\{s:\ s\bmod 100\in\{7,93\}\},\qquad S_2=\{s:\ s\bmod 100\in\{43,57\}\},
+\]
+each consisting of $18$ types, all of weight $f(s,S_i)=1$. The second largest value is attained by
+$S=\Z/900\Z$ (all types present) and equals
+\[
+ \frac{72K_2'+828J'}{900}=\frac{3.60820+11.79486}{900}=\frac{15.40306}{900}\approx 0.0171145<\frac{1}{50};
+\]
+this is also the largest value among configurations containing at least one type outside $C$.
+\end{theorem}
+
+The optimum was computed in three independent ways:
+\begin{enumerate}
+\item a CBC $0$--$1$ integer program on the reduced model ($72$ binary variables for $C$-types, $36$ for
+the non-$C$ signature groups, plus full-weight indicator variables), by the author
+(\texttt{typebound.py});
+\item an exhaustive enumeration over the $64$ Galois-closed signature sets ($439$ valid pairs), with
+each candidate realized as an explicit type set and $F$ evaluated directly from its definition on all
+$900$ types (\texttt{opt\_closure.py}, referee);
+\item a HiGHS MILP on the reduced model with no-good cuts, enumerating \emph{all} optimal solutions and
+the next value below them (\texttt{opt\_milp\_reduced.py}, referee).
+\end{enumerate}
+No brute-force search over subsets of $\Z/900\Z$ was performed, and none is needed. As a
+cross-validation, $3000$ random admissible configurations $S$ were evaluated directly and none
+exceeded $18/900$.
+
+\begin{remark}[The binding inequality and its robustness]\label{rem:binding}
+Theorem~\ref{thm:opt} reduces the whole stability statement to the single numerical inequality
+\[
+ 72K_2'+828J'\ <\ 18 ,
+\]
+which holds with room to spare: $72K_2'+828J'=15.40306$. At the true value of $K_2'$ the inequality
+would still hold for any $J'<0.01738$. It is, however, genuinely necessary to use the refined constant
+$J'$ rather than $K_1$: replacing $J'$ by $K_1$ gives $(72K_2'+828K_1)/900\approx 0.0292>1/50$.
+\end{remark}
+
+\section{Proof of Theorem~\ref{thm:main}}\label{sec:proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Let $\varepsilon>0$. Let $A\subseteq[N]$ be admissible, contained in neither extremal class, and let
+$S\subseteq\Z/900\Z$ be its set of types. If some $a\in A$ has $a\not\equiv 7\ (25)$ then its type
+$s$ satisfies $s\not\equiv 7\ (25)$, and similarly for $18$; hence $S\in\Sigma$.
+
+By Proposition~\ref{prop:pertype} (applied with $\varepsilon/2$) and Theorem~\ref{thm:opt},
+\[
+ |A|\ \le\ N\,F(S)+\frac{\varepsilon}{2}N+O(900)\ \le\ \frac{N}{50}+\frac{\varepsilon}{2}N+O(900),
+\]
+which is at most $(1/50+\varepsilon)N$ once $N\ge N_0(\varepsilon)$ with $N_0$ large enough to absorb
+the $O(900)$ term. This proves the upper bound.
+
+Sharpness is Proposition~\ref{prop:extremal}: $A_1$ and $A_2$ are admissible, meet both classes, and
+have $N/50+O(1)$ elements. That these are, within the mod-$900$ type framework, the only configurations
+attaining the bound is the uniqueness statement of Theorem~\ref{thm:opt}, together with
+Proposition~\ref{prop:only-two}.
+\end{proof}
+
+\section{Numerical evidence for small \texorpdfstring{$N$}{N}}\label{sec:small}
+
+Exact maximum-clique computations in the compatibility graph on
+$\{n\le N:\ n^2+1\ \text{not squarefree}\}$ give the following (these are consistent with, but of
+course weak evidence for, an asymptotic statement):
+\begin{itemize}
+\item For every $N\le 10000$, the overall maximum admissible size equals
+$|\{n\le N:\ n\equiv 7\ (25)\}|$, in agreement with Theorem~\ref{thm:li}.
+\item For every $N$ with $557\le N\le 10000$, the largest admissible set not contained in a single
+mod-$25$ class is exactly the $\{7,93\}$ (or $\{43,57\}$) mod $100$ set. For some $N\le 556$ it is one
+element larger.
+\item The largest admissible set containing an element whose type lies outside $C$ has about $0.0155N$
+elements for $N=4000$--$10000$, below the asymptotic runner-up value $0.0171145$ of
+Theorem~\ref{thm:opt}.
+\end{itemize}
+
+\section{Computational components and verification status}\label{sec:verif}
+
+We separate clearly what is computed, what is verified, and what is taken as an input.
+
+\paragraph{(A) Finite computations entering the proof of Theorem~\ref{thm:main}.}
+\begin{enumerate}
+\item \emph{Local and gluing checks mod $900$.} The facts (F1)--(F3) of Lemma~\ref{lem:F1}, the
+signature reduction data (that all $23$ non-$C$ types of a signature behave identically towards each
+$C$-type, and that the relation $R$ reproduces gluing in all cross-class and $C$/non-$C$ cases), and
+Proposition~\ref{prop:only-two}, were verified by direct enumeration: (F1) for all primes $p<2000$,
+(F2) on $20{,}000$ random pairs, (F3) and the signature data on all $900\times 900$ type pairs, and
+the mod-$100$ cross-class pairs exhaustively (and against all integer pairs up to $20000$).
+\item \emph{The mod-$900$ maximization.} Theorem~\ref{thm:opt} is a finite computation, performed by
+the three independent solvers listed in Section~\ref{sec:opt} (CBC $0$--$1$ program; exhaustive
+enumeration over the $64$ Galois-closed candidate configurations; and an independent HiGHS MILP solve). The three solvers were written independently and share
+no code; they agree on the optimal value, on the extremal configuration, and on the certificate of
+optimality (a dual/feasibility certificate in the $0$--$1$ program, and exhaustion in the other two).
+% TODO(author): state explicitly which $6$-element Galois orbit structure the $64 = 2^6$ Galois-closed
+% configurations enumerate, so that the second solver's search space is reproducible from the text alone.
+\end{enumerate}
+
+\paragraph{(B) The verified numerical range.}
+The explicit certificate described in Section~\ref{sec:small} was generated and then re-checked by a
+separate program. The generator emits, for each plateau of the relevant counting function, the
+plateau endpoints and the associated witness data; the checker re-reads this output and verifies each
+plateau independently of the generator's internal state, so that an error in the generator cannot be
+absorbed silently. The verification covers all
+\[
+N \le 9{,}999{,}981,
+\]
+comprising $399{,}999$ plateaus. The resulting artefacts have MD5 checksums
+\[
+\texttt{e5b8573a}\ \ (\text{global certificate}),\qquad
+\texttt{e3330948}\ \ (\text{plateau deltas}),
+\]
+quoted here by their leading bytes; the full checksums and both programs are distributed with the
+code (see (D) below). We stress that this computation does not enter the proof of
+Theorem~\ref{thm:main}: it is a consistency check on the constants and on the structure of the
+extremal configuration in the accessible range.
+
+\paragraph{(C) Independent rebuild of Li's formalization.}
+The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
+\cite{Li2026,LiRepo}. We did not take the published build artefacts on trust. Instead we rebuilt the
+project from source and replayed the kernel checks. Three points are worth recording.
+
+\begin{enumerate}
+\item \emph{Patch.} The repository as published did not compile against the toolchain we used; a
+two declarations were missing the implicit binders they use, which the project's
+\texttt{autoImplicit = false} setting turns into a build stall; a two-line patch adds the binders
+$\{v\ w : \mathbb{N}\}$ and $\{w : \mathbb{N}\}$, with no change to any statement (the elaborated
+types are identical, checked with \texttt{pp.all}). The patch is included verbatim in our repository so that the discrepancy between the
+published source and the compiling source is visible rather than hidden.
+\item \emph{Build.} With this patch the full project builds cleanly: $39{,}069$ jobs, exit code $0$,
+no \texttt{sorry} and no errors.
+\item \emph{Kernel replay and axiom audit.} We ran \verb|#print axioms| on the top-level statement
+\verb|all_N| and obtained exactly
+\[
+\texttt{[propext, Classical.choice, Quot.sound]},
+\]
+i.e.\ the three standard axioms of Lean's \texttt{Mathlib} foundation and nothing further --- in
+particular no \texttt{sorryAx} and no unverified native-code evaluation axiom. Independently, a run
+of \texttt{leanchecker} over the compiled environment re-checked $30{,}636$ modules with $0$
+failures, so the proof terms were replayed by the kernel rather than merely accepted from the
+compiler's cache.
+\end{enumerate}
+
+Thus the input we take from \cite{Li2026,LiRepo} is a machine-checked theorem whose dependency set we
+have audited, not an informal assertion.
+
+\paragraph{(D) Availability.}
+All code described above --- the three mod-$900$ solvers, the enumeration scripts for (F1)--(F3) and
+for the signature reduction, the certificate generator and the independent certificate checker, the
+build and kernel-replay scripts for (C), and the binder patch --- is publicly available at
+\begin{center}
+\url{https://github.com/Paulee314/erdos848}
+\end{center}
+together with the raw output files whose checksums are quoted in (B).
+
+\paragraph{Summary of logical status.}
+Theorem~\ref{thm:main} depends on: (i) the finite checks (A), each of which is an exhaustive
+enumeration over an explicitly bounded search space; (ii) the formalized result of Li
+\cite{Li2026,LiRepo}, audited as in (C); and (iii) the stability statement of Sawhney
+\cite{Sawhney}. It does \emph{not} depend on the numerical range (B), which is reported as
+independent corroborating evidence.
+
+\begin{thebibliography}{9}
+
+\bibitem{ErdosProblem848}
+\emph{Erd\H{o}s Problem 848}, Erd\H{o}s Problems database.
+\url{https://www.erdosproblems.com/848}.
+
+\bibitem{Li2026}
+A.~C.~Li,
+\emph{Erd\H{o}s Problem 848: a kernel-checked proof of the exact extremal bound},
+SSRN preprint, abstract id.~7230480.
+\url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7230480}.
+
+\bibitem{LiRepo}
+A.~C.~Li,
+\emph{erdos-848-squarefree-product} (Lean formalization, source repository).
+\url{https://github.com/crabsatellite/erdos-848-squarefree-product}.
+
+\bibitem{Sawhney}
+M.~Sawhney,
+\emph{Stability for Erd\H{o}s Problem 848}.
+As reported in the project sources accompanying \cite{ErdosProblem848}.
+% TODO(author): replace with full bibliographic data (venue/preprint number/date) once the
+% primary source for Sawhney's stability result is located; the project sources used here
+% report the statement but give no further bibliographic details.
+
+\bibitem{AstroCat}
+AstroCat93,
+\emph{erdos-848-verification} (GitHub repository).
+\url{https://github.com/AstroCat93/erdos-848-verification}.
+
+\bibitem{LeeRepo}
+P.~J.~Lee,
+\emph{erdos848}: solvers, certificates and verification scripts, 2026.
+\url{https://github.com/Paulee314/erdos848}.
+
+\end{thebibliography}
+
+\end{document}
