@@ -1,0 +1,22 @@
+diff --git a/lean4/Erdos848/TailGlobalMixedWordCountSound.lean b/lean4/Erdos848/TailGlobalMixedWordCountSound.lean
+index 6bd99bcb..f4bcf448 100644
+--- a/lean4/Erdos848/TailGlobalMixedWordCountSound.lean
++++ b/lean4/Erdos848/TailGlobalMixedWordCountSound.lean
+@@ -24,7 +24,7 @@ theorem halfMaskedByte_le (x : BitVec 8) : halfMaskedByte x ≤ x := by
+   decide
+ 
+ theorem append_le_append
+-    {xh yh : BitVec v} {xl yl : BitVec w}
++    {v w : ℕ} {xh yh : BitVec v} {xl yl : BitVec w}
+     (hhigh : xh ≤ yh) (hlow : xl ≤ yl) :
+     xh ++ xl ≤ yh ++ yl := by
+   rw [BitVec.le_def] at hhigh hlow ⊢
+@@ -259,7 +259,7 @@ private theorem globalMixedCoreWordCount_eq_cpop (x : BitVec 64) :
+         (x.extractLsb' 8 8) (x.extractLsb' 0 8)).cpop.toNat = _
+       rw [pack8_extracts]
+ 
+-private theorem globalMixedCpopNatRec_eq_sum (x : BitVec w) : ∀ n acc,
++private theorem globalMixedCpopNatRec_eq_sum {w : ℕ} (x : BitVec w) : ∀ n acc,
+     x.cpopNatRec n acc =
+       acc + ∑ i ∈ Finset.range n, (x.getLsbD i).toNat := by
+   intro n

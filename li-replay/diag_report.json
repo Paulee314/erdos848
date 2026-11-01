@@ -1,0 +1,37 @@
+{
+ "time": "2026-10-30T00:25:50Z",
+ "original_sha256": "e1ea93ff59b453b65d94e2c9b77010b1364bec00499c6478cf51c36d48de7987",
+ "patched_sha256": "1003cc7e2fb9f0f52f3587980242096f2bafb516fb5798ab008305b6f38fa69d",
+ "patch_diff": "27c27\n<     {xh yh : BitVec v} {xl yl : BitVec w}\n---\n>     {v w : ℕ} {xh yh : BitVec v} {xl yl : BitVec w}\n262c262\n< private theorem globalMixedCpopNatRec_eq_sum (x : BitVec w) : ∀ n acc,\n---\n> private theorem globalMixedCpopNatRec_eq_sum {w : ℕ} (x : BitVec w) : ∀ n acc,\n",
+ "declarations": 30,
+ "runs": {
+  "R1_patched_exact_build_command": {
+   "rc": 0,
+   "seconds": 6.4,
+   "errors": []
+  },
+  "R2_original_autobound_allowed": {
+   "rc": 0,
+   "seconds": 6.4,
+   "errors": []
+  },
+  "R3_patched_autobound_off": {
+   "rc": 0,
+   "seconds": 6.4,
+   "errors": []
+  }
+ },
+ "types_compared": 30,
+ "types_R2": 30,
+ "types_R3": 30,
+ "type_mismatches": [],
+ "sample_types": {
+  "append_le_append": "@Erdos848.append_le_append : ∀ {v w : Nat} {xh yh : BitVec v} {xl yl : BitVec w}\n  (hhigh : @LE.le.{0} (BitVec v) (@instLEBitVec v) xh yh) (hlow : @LE.le.{0} (BitVec w) (@instLEBitVec w) xl yl),\n  @LE.le.{0} (BitVec (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) v w))\n    (@instLEBitVec (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) v w))\n    (@HAppend.hAppend.{",
+  "globalMixedCpopNatRec_eq_sum": "@_private._stdin.0.Erdos848.globalMixedCpopNatRec_eq_sum : ∀ {w : Nat} (x : BitVec w) (n acc : Nat),\n  @Eq.{1} Nat (@BitVec.cpopNatRec w x n acc)\n    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) acc\n      (@Finset.sum.{0, 0} Nat Nat Nat.instAddCommMonoid (Finset.range n) fun (i : Nat) ↦\n        Bool.toNat (@BitVec.getLsbD w x i)))"
+ },
+ "axioms": [
+  "'Erdos848.globalMixedCoreWordCount_eq_bits_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'Erdos848.globalMixedCoreWordCount_eq_cpop_toNat' depends on axioms: [propext, Classical.choice, Quot.sound]"
+ ],
+ "verdict": "PASS"
+}

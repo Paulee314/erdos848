@@ -1,0 +1,90 @@
+{
+ "time": "2026-10-30T00:52:53Z",
+ "manifest_entries": 30736,
+ "same_as_manifest": 30735,
+ "differ_from_manifest": [
+  {
+   "path": "lean4/Erdos848/TailGlobalMixedWordCountSound.lean",
+   "manifest": [
+    "e1ea93ff59b453b65d94e2c9b77010b1364bec00499c6478cf51c36d48de7987"
+   ],
+   "ours": "1003cc7e2fb9f0f52f3587980242096f2bafb516fb5798ab008305b6f38fa69d"
+  }
+ ],
+ "missing": [],
+ "missing_count": 0,
+ "lean_files_in_repo": 30638,
+ "lean_files_not_in_manifest": [],
+ "not_in_manifest_count": 0,
+ "search": {
+  "skipKernelTC": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "debug.* option": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "axiom declaration": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "native_decide": {
+   "count": 3,
+   "files": 2,
+   "first": [
+    "lean4/Erdos848/PrattCore.lean:86: `native_decide`: they are proved through Lucas/Pratt certificates, whose",
+    "lean4/Erdos848/PrattCore.lean:96: in the kernel without `native_decide`. -/",
+    "lean4/Erdos848/Asymptotic.lean:32: Build: 0 sorry, 0 native_decide, 0 axioms"
+   ]
+  },
+  "ofReduceBool / reduceBool": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "implemented_by": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "extern": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "unsafe": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "sorry": {
+   "count": 1,
+   "files": 1,
+   "first": [
+    "lean4/Erdos848/Asymptotic.lean:32: Build: 0 sorry, 0 native_decide, 0 axioms"
+   ]
+  },
+  "admit": {
+   "count": 2,
+   "files": 2,
+   "first": [
+    "lean4/Erdos848/TailFiveMillionSupport.lean:9: four-prime prefixes which admit a fifth larger prime under the ten-million",
+    "lean4/Erdos848/TailGlobalMixedSupportComplete.lean:10: The generated checker enumerates only increasing support prefixes that admit"
+   ]
+  },
+  "trust option": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  },
+  "decide := true / kernel": {
+   "count": 0,
+   "files": 0,
+   "first": []
+  }
+ }
+}

@@ -1,0 +1,8 @@
+27c27
+<     {xh yh : BitVec v} {xl yl : BitVec w}
+---
+>     {v w : ℕ} {xh yh : BitVec v} {xl yl : BitVec w}
+262c262
+< private theorem globalMixedCpopNatRec_eq_sum (x : BitVec w) : ∀ n acc,
+---
+> private theorem globalMixedCpopNatRec_eq_sum {w : ℕ} (x : BitVec w) : ∀ n acc,

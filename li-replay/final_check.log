@@ -1,0 +1,28 @@
+2026-10-30T03:17:21Z
+'Erdos848.PaperGeneratedCertificateProvider.all_N' depends on axioms: [propext, Classical.choice, Quot.sound]
+Erdos848.PaperGeneratedCertificateProvider.all_N : ∀ (N : ℕ), Erdos848.OriginalProblem848Statement N
+def Erdos848.OriginalProblem848Statement : ℕ → Prop :=
+fun N => ∀ A ⊆ Finset.Icc 1 N, Erdos848.NonSquarefreeProductProp A → A.card ≤ {n ∈ Finset.Icc 1 N | n % 25 = 7}.card
+def Erdos848.NonSquarefreeProductProp : Finset ℕ → Prop :=
+fun A => ∀ a ∈ A, ∀ b ∈ A, ¬Squarefree (a * b + 1)
+'erdos848_our_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+       49.91 real        34.47 user         8.82 sys
+         29417603072  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1943180  page reclaims
+                  15  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               32738  voluntary context switches
+               34955  involuntary context switches
+        119242367611  instructions retired
+        139709567944  cycles elapsed
+         10489011016  peak memory footprint
+final_exit=0
+2026-10-30T03:18:11Z

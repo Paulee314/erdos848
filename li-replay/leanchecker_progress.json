@@ -1,0 +1,1 @@
+{"time": "2026-11-01T17:32:01Z", "modules_total": 30636, "modules_ok": 30636, "groups_total": 624, "groups_left": 0, "running": {}, "failures": 0, "problems": 0, "leanchecker_rss_gb": 0, "compressor_gb": 1.2, "free_gb": 163.3, "held": false, "conc": 2, "threads": "4", "started": "2026-11-01T17:14:53Z", "modules_per_h": 15262, "eta_h": 0.0}
