@@ -54,6 +54,23 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
 Status: audited DRAFT for the author's review; not submitted anywhere.
+Second revision 2026-11-01: at the author's direction, the remaining
+Argon items were put to Claude via the Anthropic API (responses saved as
+ARGON_ITEMS_CLAUDE.md; Opus for A-D3, Sonnet for D4-D5 after Opus refused
+the follow-up prompt) and all were applied: (A) independence framing -
+abstract edits, Remark 1.5 rewritten (no ineffectivity inherited; Li
+quoted only for the exact f(N)), subsection retitled Inputs -> Context,
+Section 9 logical-status paragraph rewritten (Theorem 1.4 implies
+Sawhney for every eta < 1/50); (B) remark listing the 7 explicit families
+of the 64 Galois-closed sets; (C) title changed to "admissible sets not
+contained in a single extremal class"; (D1) the 7*18+1=127 clause moved
+out of the divisibility claim; (D2) hand proof of the cross-class check
+added as a remark after Proposition 2.2; (D3) runner-up display
+recomputed from unrounded J' (11.79484, 15.40304) with a rounding note;
+(D4) Lemma 6.1 now states 441 compatible pairs, 439 after excluding the
+two single-class pairs; (D5) "a two declarations" grammar fixed. Claude's
+draft for (A) cited two labels that do not exist in the file (lem:tail,
+sec:gluing); these were corrected to lem:trunc and sec:types on insertion.
 Revision 2026-11-01 (post-review): an independent review (Argon) found,
 and Muse verified, a genuine gap in Lemma 4.1 as drafted — the tail bound
 needs coefficient 3 (a large prime can witness D in two classes or P_b in

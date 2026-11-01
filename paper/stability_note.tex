@@ -23,7 +23,7 @@
 \newcommand{\N}{\mathbb{N}}
 
 \title{A sharp stability threshold for Erd\H{o}s Problem 848:\\
-admissible sets meeting both extremal classes\\
+admissible sets not contained in a single extremal class\\
 have density at most $1/50$}
 \author{Paul J.\ Lee}
 \date{November 2026}
@@ -34,7 +34,7 @@ have density at most $1/50$}
 \begin{abstract}
 Call $A\subseteq\{1,\dots,N\}$ \emph{admissible} if $ab+1$ is not squarefree for all $a,b\in A$,
 including $a=b$. A.~C.~Li has determined the maximum size $f(N)=\lfloor (N+18)/25\rfloor$ of an
-admissible set for every $N$, in a Lean-formalized proof which we take as an input; the extremal sets
+admissible set for every $N$, in a Lean-formalized proof; the extremal sets
 are the residue classes $n\equiv 7 \pmod{25}$ and $n\equiv 18\pmod{25}$. Sawhney had previously proved a
 stability statement: there is an (unspecified) $\eta>0$, implicitly $\eta\approx 0.0023$, such that for
 large $N$ every admissible set of size at least $(1/25-\eta)N$ lies inside one of these two classes;
@@ -47,7 +47,9 @@ The proof combines uniform analytic density bounds for the relevant squarefree-s
 explicit finite computations, both described in the paper: the determination of the divisibility
 (``gluing'') relation on residues modulo $900$, and the maximization of the resulting weighted
 objective by $0$--$1$ programming together with an exhaustive enumeration over the $64$ Galois-closed
-signature sets. No explicit $N_0$ is claimed.
+signature sets. The argument is self-contained: it uses neither Li's theorem nor Sawhney's, and it
+implies Sawhney's stability statement for every fixed $\eta<1/50$; Li's theorem is quoted only for
+the exact extremal value $f(N)$ attained inside a single class. No explicit $N_0$ is claimed.
 \end{abstract}
 
 \section{Introduction}
@@ -74,12 +76,12 @@ Two residue classes are admissible for trivial local reasons:
  \mathcal{C}^{7}_N=\{n\le N:\ n\equiv 7\ (25)\},\qquad
  \mathcal{C}^{18}_N=\{n\le N:\ n\equiv 18\ (25)\},
 \]
-because $7\cdot 7+1=50$, $18\cdot 18+1=325$ and $7\cdot 18+1=127$ are such that $25\mid ab+1$ whenever
-$a\equiv b\equiv 7\ (25)$ or $a\equiv b\equiv 18\ (25)$. (Note that $25\nmid 127$: the two classes are
-\emph{not} glued to each other by $25$. This will matter.) We call these the two
-\emph{extremal classes}.
+because $7\cdot 7+1=50$ and $18\cdot 18+1=325$ are both divisible by $25$, so that $25\mid ab+1$
+whenever $a\equiv b\equiv 7\ (25)$ or $a\equiv b\equiv 18\ (25)$. (By contrast $7\cdot 18+1=127$ is
+\emph{not} divisible by $25$: the two classes are not glued to each other by $25$. This will
+matter.) We call these the two \emph{extremal classes}.
 
-\subsection{Inputs: Li's theorem and Sawhney's stability theorem}
+\subsection{Context: Li's theorem and Sawhney's stability theorem}
 
 \begin{theorem}[A.~C.~Li \cite{Li}]\label{thm:li}
 For every $N\ge 1$,
@@ -135,10 +137,17 @@ $1/50+\varepsilon$, and the latter bound is attained.
 \begin{remark}[Ineffectivity]\label{rem:ineff}
 No explicit $N_0(\varepsilon)$ is claimed anywhere in this note. The density bounds of
 Section~\ref{sec:dens} are stated in an $\varepsilon$--$T$--$N_0$ form in which the truncation
-parameter $T=T(\varepsilon)$ and then $N_0$ are chosen but not tracked, and the large-prime error
-terms are handled exactly as in Sawhney's argument \cite{Sawhney}, which we take as given and do not
-re-derive. In this sense $N_0(\varepsilon)$ is ineffective as stated here, and it inherits the
-ineffectivity of the inputs \cite{Li,Sawhney} in the surrounding discussion.
+parameter $T=T(\varepsilon)$ and then $N_0$ are chosen but not tracked. This is a matter of
+convenience rather than of principle: the tail estimate of Lemma~\ref{lem:trunc} is elementary
+(it uses only $q^{2}\le ab+1\le N^{2}+1$ for the prime squares $q^{2}$ in question), and the
+remaining ingredients are the finite congruence computations of
+Sections~\ref{sec:types} and~\ref{sec:opt}. An explicit $N_0(\varepsilon)$ could therefore be
+extracted by tracking $T(\varepsilon)$, the tail sum over primes $q>T$, and the $O_T(1)$ CRT
+error; we do not carry this out. We stress that the proof of Theorem~\ref{thm:main} is logically
+independent of \cite{Sawhney}: no estimate of Sawhney's is used, and no ineffectivity is inherited
+from it. Li's theorem \cite{Li} is likewise not used in the proof of Theorem~\ref{thm:main}; it is
+quoted only for the exact extremal value $f(N)=\lfloor (N+18)/25\rfloor$ inside a single extremal
+class, in the surrounding discussion.
 % TODO(author): an effective N_0 would require tracking T(eps), the tail sum over primes q > T, and
 % the O_T(1) CRT error; none of the source material does this.
 \end{remark}
@@ -195,6 +204,16 @@ squarefree by a local obstruction at $4$, $9$ or $25$) are decided by a direct c
 $900$. The enumeration was carried out by the author and independently by the referee of
 \cite{LeeRepo}, and also checked against all actual integer pairs up to $20000$.
 \end{proof}
+
+\begin{remark}[The cross-class check by hand]\label{rem:hand100}
+The cross-class part of the computation above can also be done by hand. Let $u\equiv 7\ (25)$ and
+$v\equiv 18\ (25)$. Then $uv+1\equiv 7\cdot 18+1=127\equiv 2\ (25)$, so $25\nmid uv+1$, and the only
+prime square that can obstruct $uv+1$ for all such $u,v$ is $4$. Hence we need
+$uv\equiv 3\ (4)$, i.e.\ $\{u\bmod 4,\ v\bmod 4\}=\{1,3\}$. Modulo $100$ the relevant residues are
+$u\in\{7,32,57,82\}$, with $u\equiv 3,0,1,2\ (4)$ respectively, and $v\in\{18,43,68,93\}$, with
+$v\equiv 2,3,0,1\ (4)$ respectively. The only pairs with $uv\equiv 3\ (4)$ are therefore
+$(u,v)=(7,93)$ and $(u,v)=(57,43)$, which are exactly the pairs underlying $A_1$ and $A_2$.
+\end{remark}
 
 \section{Types modulo $900$ and gluing}\label{sec:types}
 
@@ -464,8 +483,10 @@ equivalently $R(R(X))=X$.
 
 \begin{lemma}[Closure reduction]\label{lem:closure}
 The maximum of $F$ over $\Sigma$ is attained at a configuration whose governing signature sets are
-Galois-closed. There are exactly $64$ Galois-closed signature sets, and exactly $439$ pairs of them
-satisfying the compatibility constraints.
+Galois-closed. There are exactly $64$ Galois-closed signature sets, and exactly $441$ ordered pairs
+$(A,B)$ of them satisfying the compatibility constraint $R(A)\subseteq B$; excluding the two pairs
+in which one side is empty and the other is the full set of $36$ signatures, which correspond to
+configurations contained in a single extremal class and so lie outside $\Sigma$, leaves $439$ pairs.
 \end{lemma}
 
 \begin{proof}
@@ -486,6 +507,31 @@ Therefore the maximum of $F$ over $\Sigma$ is attained at a configuration whose 
 sets are Galois-closed.
 \end{proof}
 
+\begin{remark}[Explicit list of the Galois-closed sets]\label{rem:closedlist}
+The $64$ closed sets can be written down by hand, so that the enumeration in
+Lemma~\ref{lem:closure} is checkable in principle without a computer. Identify the $36$ signatures
+with pairs $(u,v)\in(\Z/4)\times(\Z/9)$ as above. Compatibility of two
+signatures is the \emph{disjunction} of the mod-$4$ and the mod-$9$ condition, so for a single
+signature $i=(a,b)$,
+\[
+ R(i)=\bigl(R_4(a)\times \Z/9\bigr)\ \cup\ \bigl(\Z/4\times R_9(b)\bigr),
+\]
+where $R_4(a)=\{u:\,4\mid ua+1\}$ and $R_9(b)=\{v:\,9\mid vb+1\}$; these are singletons when $a$ is
+odd, resp.\ when $3\nmid b$, and empty otherwise. Intersecting such sets, one finds that the Galois-closed
+signature sets are exactly:
+\begin{enumerate}
+\item the empty set \hfill($1$ set);
+\item the full set of all $36$ signatures \hfill($1$);
+\item the singletons $\{(u,v)\}$ with $u\in\{1,3\}$ and $v$ a unit mod $9$ \hfill($12$);
+\item their duals $R(\{(u,v)\})$, each of size $12$ \hfill($12$);
+\item the two-element sets $\{(1,v_1),(3,v_2)\}$ with $v_1\neq v_2$ units mod $9$ \hfill($30$);
+\item the sets $(\Z/4)\times\{v\}$, of size $4$, with $v$ a unit mod $9$ \hfill($6$);
+\item the sets $\{u\}\times(\Z/9)$, of size $9$, with $u\in\{1,3\}$ \hfill($2$).
+\end{enumerate}
+Families (1), (2), (5), (6), (7) are preserved by $R$ (as families), while $R$ exchanges families (3) and (4).
+The total is $1+1+12+12+30+6+2=64$, in agreement with the enumeration.
+\end{remark}
+
 % Note: the enumeration behind the count above is implemented in opt_closure.py (which verifies
 % R(R(X)) = X for each enumerated closed set and cross-validates F against its definition on all
 % 900 types, including 3000 random type sets). The computational conclusions of Theorem 6.2 below
@@ -504,10 +550,14 @@ and the maximum is attained by exactly two configurations, namely
 each consisting of $18$ types, all of weight $f(s,S_i)=1$. The second largest value is attained by
 $S=\Z/900\Z$ (all types present) and equals
 \[
- \frac{72K_2'+828J'}{900}=\frac{3.60820+11.79486}{900}=\frac{15.40306}{900}\approx 0.0171145<\frac{1}{50};
+ \frac{72K_2'+828J'}{900}=\frac{3.60820+11.79484}{900}=\frac{15.40304}{900}\approx 0.0171145<\frac{1}{50};
 \]
 this is also the largest value among configurations containing at least one type outside $C$.
 \end{theorem}
+
+All decimal values quoted in this section are rounded for display; the underlying computations use
+the unrounded constants (e.g.\ $J'=0.0142449748\ldots$, not the rounded $0.0142450$). The rounding
+affects only the fifth decimal place of the products above and none of the inequalities used.
 
 The optimum was computed in three independent ways:
 \begin{enumerate}
@@ -529,7 +579,7 @@ Theorem~\ref{thm:opt} reduces the whole stability statement to the single numeri
 \[
  72K_2'+828J'\ <\ 18 ,
 \]
-which holds with room to spare: $72K_2'+828J'=15.40306$. At the true value of $K_2'$ the inequality
+which holds with room to spare: $72K_2'+828J'=15.40304$. At the true value of $K_2'$ the inequality
 would still hold for any $J'<0.01738$. It is, however, genuinely necessary to use the refined constant
 $J'$ rather than $K_1$: replacing $J'$ by $K_1$ gives $(72K_2'+828K_1)/900\approx 0.0292>1/50$.
 \end{remark}
@@ -616,8 +666,8 @@ The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
 project from source and replayed the kernel checks. Three points are worth recording.
 
 \begin{enumerate}
-\item \emph{Patch.} The repository as published did not compile against the toolchain we used; a
-two declarations were missing the implicit binders they use, which the project's
+\item \emph{Patch.} The repository as published did not compile against the toolchain we used; two
+declarations were missing the implicit binders they use, which the project's
 \texttt{autoImplicit = false} setting turns into a build stall; a two-line patch adds the binders
 $\{v\ w : \mathbb{N}\}$ and $\{w : \mathbb{N}\}$, with no change to any statement (the elaborated
 types are identical, checked with \texttt{pp.all}). The patch is included verbatim in our repository so that the discrepancy between the
@@ -649,11 +699,19 @@ build and kernel-replay scripts for (C), and the binder patch --- is publicly av
 together with the raw output files whose checksums are quoted in (B).
 
 \paragraph{Summary of logical status.}
-Theorem~\ref{thm:main} depends on: (i) the finite checks (A), each of which is an exhaustive
-enumeration over an explicitly bounded search space; (ii) the formalized result of Li
-\cite{Li,LiRepo}, audited as in (C); and (iii) the stability statement of Sawhney
-\cite{Sawhney}. It does \emph{not} depend on the numerical range (B), which is reported as
-independent corroborating evidence.
+Theorem~\ref{thm:main} depends on: (i) the analytic density bounds of Section~\ref{sec:dens},
+proved here from first principles; and (ii) the finite checks (A), each of which is an exhaustive
+enumeration over an explicitly bounded search space. It does \emph{not} depend on the formalized
+result of Li \cite{Li,LiRepo}, and it does \emph{not} depend on the stability statement of Sawhney
+\cite{Sawhney}. Theorem~\ref{thm:li} is quoted only for the exact extremal value
+$f(N)=\lfloor (N+18)/25\rfloor$ attained inside a single extremal class, which is what allows the
+picture to be described as complete; the audit (C) is reported for readers who wish to rely on that
+value, not because Theorem~\ref{thm:main} rests on it. Theorem~\ref{thm:sawhney} is the predecessor
+statement that the present work sharpens: Theorem~\ref{thm:main} implies
+Theorem~\ref{thm:sawhney} for every fixed $\eta<1/50$ (take $\varepsilon<1/50-\eta$ in
+Theorem~\ref{thm:main}), so the admissible $\eta$ is improved from $\approx 0.0023$ to anything
+below $1/50=0.02$. Finally, Theorem~\ref{thm:main} does not depend on the numerical range (B),
+which is reported as independent corroborating evidence.
 
 \begin{thebibliography}{9}
 
