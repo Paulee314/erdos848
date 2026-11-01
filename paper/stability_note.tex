@@ -679,7 +679,9 @@ extremal configuration in the accessible range.
 \paragraph{(C) Independent rebuild of Li's formalization.}
 The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
 \cite{Li,LiRepo}. We did not take the published build artefacts on trust. Instead we rebuilt the
-project from source and replayed the kernel checks. Three points are worth recording.
+project --- the $30{,}636$ \texttt{Erdos848} modules behind the final theorem compiled from source,
+with Mathlib and its dependencies taken from the official Mathlib build cache --- and replayed the
+kernel checks. Three points are worth recording.
 
 \begin{enumerate}
 \item \emph{Patch.} The repository as published did not compile against the toolchain we used; two
@@ -689,7 +691,8 @@ $\{v\ w : \mathbb{N}\}$ and $\{w : \mathbb{N}\}$, with no change to any statemen
 types are identical, checked with \texttt{pp.all}). The patch is included verbatim in our repository so that the discrepancy between the
 published source and the compiling source is visible rather than hidden.
 \item \emph{Build.} With this patch the full project builds cleanly: $39{,}069$ jobs, exit code $0$,
-no \texttt{sorry} and no errors.
+no \texttt{sorry} and no errors. (Two \texttt{Publication*} files in the repository are not part of
+the build for the final theorem.)
 \item \emph{Kernel replay and axiom audit.} We ran \verb|#print axioms| on the top-level statement
 \verb|all_N| and obtained exactly
 \[
@@ -697,9 +700,9 @@ no \texttt{sorry} and no errors.
 \]
 i.e.\ the three standard axioms of Lean's \texttt{Mathlib} foundation and nothing further --- in
 particular no \texttt{sorryAx} and no unverified native-code evaluation axiom. Independently, a run
-of \texttt{leanchecker} over the compiled environment re-checked $30{,}636$ modules with $0$
-failures, so the proof terms were replayed by the kernel rather than merely accepted from the
-compiler's cache.
+of \texttt{leanchecker} over the compiled environment re-checked the $30{,}636$ project modules
+with $0$ failures (Mathlib itself was not replayed), so the proof terms were re-run through the
+Lean kernel rather than merely accepted from the compiler's cache.
 \end{enumerate}
 
 Thus the input we take from \cite{Li,LiRepo} is a machine-checked theorem whose dependency set we
