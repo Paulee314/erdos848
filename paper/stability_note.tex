@@ -381,7 +381,11 @@ $\gcd(b,\ell)=1$ is the worse (larger) case.
 \item If $\ell\in\Dset$ and $P_\ell\subset D_\ell$ (equivalently $\ell^2\mid b^2+1$), then $Z_\ell$
 rises from $1-3/\ell^{2}$ to $1-2/\ell^{2}$, which raises the density. So coincidence is the worse case.
 \end{itemize}
-Taking the worst case at every prime simultaneously therefore majorizes every $b$. In that worst case
+Taking the worst case at every prime simultaneously therefore majorizes every $b$. The constant
+$J'$ so obtained is a formal majorant: the worse alternative is taken independently at each prime,
+and no single integer $b$ need realize all of them at once (indeed $\ell^2\mid b^2+1$ can hold for
+only finitely many $\ell$, since $\ell^2\le b^2+1$); the bound is valid for every $b$ regardless.
+In that worst case
 $\prod Y=A_{\Dset}$, $\prod X=Q\,B_{\Dset}=1-K_2'$ and $\prod Z=Q\,A_{\Dset}$, giving
 \[
  1-A_{\Dset}-Q B_{\Dset}+Q A_{\Dset}=K_1-Q\bigl(B_{\Dset}-A_{\Dset}\bigr)=J' .
@@ -461,6 +465,16 @@ admissibility) with $s\notin C$, so $D(a)$ holds by (F1). Lemma~\ref{lem:J} give
 $|A_s|\le 1+(J'+\varepsilon)N/M$. If $|A_s|\le 1$ its contribution is at most $1$, which is absorbed in
 the $O(M)$ term.
 \end{proof}
+
+\begin{remark}[The diagonal condition is essential]\label{rem:diagonal}
+The argument just given uses the diagonal case $a=b$ of admissibility in an essential way: it is
+what forces $D(a)$ for $a$ of non-$C$ type, and hence the weight $J'$ rather than $K_2'$. Without
+the diagonal condition, a non-$C$ type would be bounded only through $P_b$ (taking $b$ to be another
+element of the same type), giving the weight $K_2'$ of Lemma~\ref{lem:K2}; since
+$K_2'\approx 0.0501139>1/50$, the maximization of Section~\ref{sec:opt} would then collapse, and
+the $1/50$ bound could not be obtained by this method. The off-diagonal variant of the problem is
+therefore not addressed here.
+\end{remark}
 
 \section{The maximization}\label{sec:opt}
 
@@ -563,8 +577,8 @@ and the maximum is attained by exactly two configurations, namely
 \[
  S_1=\{s:\ s\bmod 100\in\{7,93\}\},\qquad S_2=\{s:\ s\bmod 100\in\{43,57\}\},
 \]
-each consisting of $18$ types, all of weight $f(s,S_i)=1$. The second largest value is attained by
-$S=\Z/900\Z$ (all types present) and equals
+each consisting of $18$ types, all of weight $f(s,S_i)=1$. The second largest value of $F$ is
+attained at the configuration $S=\Z/900\Z$ (all types present) and equals
 \[
  \frac{72K_2'+828J'}{900}=\frac{3.60820+11.79484}{900}=\frac{15.40304}{900}\approx 0.0171145<\frac{1}{50};
 \]
@@ -574,6 +588,10 @@ this is also the largest value among configurations containing at least one type
 All decimal values quoted in this section are rounded for display; the underlying computations use
 the unrounded constants (e.g.\ $J'=0.0142449748\ldots$, not the rounded $0.0142450$). The rounding
 affects only the fifth decimal place of the products above and none of the inequalities used.
+Both extremal values in Theorem~\ref{thm:opt} are values of the upper-bound functional $F$; in
+particular the runner-up value is not the density of an admissible set, only the value of $F$ at
+the all-types configuration (compare Section~\ref{sec:small}, where the largest admissible sets
+using types outside $C$ have about $0.0155N$ elements in the computed range).
 
 The optimum was computed in three independent ways:
 \begin{enumerate}

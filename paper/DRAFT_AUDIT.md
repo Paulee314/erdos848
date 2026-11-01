@@ -53,6 +53,17 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
    one of which uses the reduction.)
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
+Fifth revision 2026-11-01: three clarifications from a referee-style
+review (whose items 1-4 again concerned the stale first-build PDF and
+were already fixed): (i) Lemma (J') proof now states explicitly that
+J' is a formal majorant - worst case taken independently per prime,
+realized by no single b; (ii) Theorem (opt) runner-up reworded to
+"second largest value of F", with a sentence clarifying it is a value
+of the upper-bound functional, not the density of an admissible set;
+(iii) new Remark after Proposition (per-type): the diagonal condition
+is essential - without it non-C types get weight K_2' > 1/50 instead
+of J' and the method collapses. PDF genuinely rebuilt (13 pp) and
+content-verified.
 CORRECTION (2026-11-01, 17:30 CST): the PDF builds claimed for the
 second, third and fourth revisions below did not in fact take place.
 Muse's VM was replaced after the first genuine build (15:35 CST),
