@@ -148,8 +148,24 @@ independent of \cite{Sawhney}: no estimate of Sawhney's is used, and no ineffect
 from it. Li's theorem \cite{Li} is likewise not used in the proof of Theorem~\ref{thm:main}; it is
 quoted only for the exact extremal value $f(N)=\lfloor (N+18)/25\rfloor$ inside a single extremal
 class, in the surrounding discussion.
-% TODO(author): an effective N_0 would require tracking T(eps), the tail sum over primes q > T, and
-% the O_T(1) CRT error; none of the source material does this.
+\end{remark}
+
+\begin{remark}[An explicit, very weak $N_0$]\label{rem:explicitN0}
+The ineffectivity above is only a matter of convenience. Tracking the choices in
+Section~\ref{sec:dens} with deliberately crude bounds: truncating each Euler product at $T$
+moves the constants $K_2'$ and $J'$ by at most $8/T$ (each product tail is at most
+$2\sum_{q>T}q^{-2}\le 2/T$), so $T=\lceil 24/\varepsilon\rceil$ makes the density error at most
+$\varepsilon/3$ and also gives $3/T\le\varepsilon/3$ for the main term of
+Lemma~\ref{lem:trunc}; the remaining error terms are the $3\pi(N)$ of that lemma and the CRT
+error, which is at most the number $Q=\prod_{7\le q\le T}q^{2}\le e^{2T\log T}$ of residue classes
+involved. By Rosser's bound $\pi(x)<1.25506\,x/\log x$, the condition
+$\log N\ge 20332/\varepsilon$ makes $3\pi(N)\le\varepsilon N/(6M)$ and also implies
+$Q\le\varepsilon N/(6M)$ for $\varepsilon\le 1/100$. Hence one may take
+\[
+ N_0(\varepsilon)=\exp\bigl(20332/\varepsilon\bigr)\qquad(\varepsilon\le 1/100),
+\]
+and in particular $N_0(1/100)\le 10^{883006}$. These values are of course far from optimal; we
+record them only to show that an explicit threshold can be extracted from the argument.
 \end{remark}
 
 \begin{remark}[Prior work and what is new]\label{rem:prior}
@@ -732,11 +748,9 @@ A.~C.~Li,
 
 \bibitem{Sawhney}
 M.~Sawhney,
-\emph{Stability for Erd\H{o}s Problem 848}.
-As reported in the project sources accompanying \cite{ErdosProblem848}.
-% TODO(author): replace with full bibliographic data (venue/preprint number/date) once the
-% primary source for Sawhney's stability result is located; the project sources used here
-% report the statement but give no further bibliographic details.
+\emph{On $A\subseteq[N]$ such that $ab+1$ is never squarefree for $a,b\in A$},
+unpublished note, October 2025.
+Available at \url{https://www.math.columbia.edu/~msawhney/Problem_848.pdf}.
 
 \bibitem{AstroCat}
 AstroCat93,

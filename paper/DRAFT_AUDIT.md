@@ -54,6 +54,21 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
 Status: audited DRAFT for the author's review; not submitted anywhere.
+Third revision 2026-11-01: (i) explicit N_0 example added (new Remark
+after Remark 1.5): tracking the Section 4 choices with crude bounds gives
+N_0(eps) = exp(20332/eps) for eps <= 1/100, in particular
+N_0(1/100) <= 10^883006; arithmetic verified numerically (Rosser
+pi(x) < 1.25506 x/log x; CRT error <= prod q^2 <= e^{2T log T}, dominated).
+This closes the effective-N_0 TODO. (ii) Sawhney bibliography completed
+from the primary source, located and read 2026-11-01: Mehtaab Sawhney,
+"On A subseteq [N] such that ab+1 is never squarefree for a,b in A",
+unpublished note, October 2025, math.columbia.edu/~msawhney/Problem_848.pdf
+(the note linked from erdosproblems.com/848; its Proposition 1.1, remark
+and four case bounds 0.0377/0.0358/0.0336/0.0294 match the paper's quotes
+exactly). The placeholder title "Stability for Erdos Problem 848" in the
+draft was not a real title and has been replaced. Caution: the
+arXiv number 2511.16072 seen in a GitHub issue is the GPT-5 science
+paper (Sawhney is a co-author), NOT this note - do not cite it as such.
 Second revision 2026-11-01: at the author's direction, the remaining
 Argon items were put to Claude via the Anthropic API (responses saved as
 ARGON_ITEMS_CLAUDE.md; Opus for A-D3, Sonnet for D4-D5 after Opus refused
