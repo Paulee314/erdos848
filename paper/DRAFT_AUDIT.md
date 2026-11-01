@@ -54,6 +54,28 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
 Status: audited DRAFT for the author's review; not submitted anywhere.
+Fourth revision 2026-11-01: a second review (Opus, working from the
+pre-Argon PDF, so most of its list was already fixed) raised four new
+items, all verified by Muse and applied: (i) Sec. 1.2 "nothing was
+known in the middle range" contradicted Remark 1.6's cited bounds -
+reworded to "only non-sharp bounds were known", and the "not read in
+full" clause was removed from Remark 1.6; (ii) "the referee of [LeeRepo]"
+was unidentifiable to a reader - now "a referee whose report and code
+are distributed with [LeeRepo]" (Prop. 2.2) and "independent referee"
+in the Sec. 6 solver list; (iii) Sec. 9(B) misdescribed the certificate
+as "described in Section 8" and as checking "the constants" - rewritten:
+the seating-chart certificate (gen848.c + independent check848.c)
+certifies the exact extremal bound |A| <= #{n <= N : n = 7 (25)} for
+all N <= 9,999,981 (399,999 plateaus), corroborating Theorem (Li)
+independently of the formalization; full SHA-256/MD5 hashes of both
+certificate files and of certs_1e7.tgz now quoted (computed from the
+repo tarball); (iv) Sec. 9(C).1 now states why the failure is a stall
+(maxHeartbeats 0 in that file), per the documented mechanism in the
+forum draft. Also added, from the same review: Corollary (second-level
+stability) after the proof of Theorem 1.4 - a mixed admissible set with
+|A| >= ((72K_2' + 828J')/900 + eps)N is contained in A_1 or A_2, via
+the closure replacement and the enumeration gap (no closed value
+strictly between 15.40304/900 and 18/900); argument verified by Muse.
 Third revision 2026-11-01: (i) explicit N_0 example added (new Remark
 after Remark 1.5): tracking the Section 4 choices with crude bounds gives
 N_0(eps) = exp(20332/eps) for eps <= 1/100, in particular

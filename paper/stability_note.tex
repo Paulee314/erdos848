@@ -106,8 +106,8 @@ Sawhney does not specify $\eta$; his four case bounds are
 $0.0377N$, $0.0358N$, $0.0336N$, $0.0294N$ (each $+o(N)$), so that $\eta\approx 0.0023$ is implicit.
 He explicitly leaves open ``a strong structural classification of sets $A$ with size $\delta N$''.
 Thus before the present note, the structure of admissible sets was understood only in the top
-sliver of densities, $|A|/N\in[1/25-0.0023,\ 1/25]$, and nothing was known in the whole middle range
-below it.
+sliver of densities, $|A|/N\in[1/25-0.0023,\ 1/25]$, and in the whole middle range below it only
+non-sharp bounds were known (see Remark~\ref{rem:prior}).
 
 \subsection{Main theorem}
 
@@ -180,8 +180,7 @@ reducing all mixed configurations to the single numerical inequality $72K_2'+828
 Section~\ref{sec:opt}. Other community bounds in circulation are weaker: $\approx 0.0276$
 (bzanghi/erdos-848) and an existential $\eta=1/2000$ in the Lean work of
 The-Obstacle-Is-The-Way/erdos-banger. A novelty search carried out on 27 October 2026 found neither
-the $1/50$ threshold nor the two constructions stated anywhere; a few sources (notably
-\S IV.1 of arXiv:2511.16072, and some raw forum material) were not read in full.
+the $1/50$ threshold nor the two constructions stated anywhere.
 \end{remark}
 
 \section{The extremal configurations}\label{sec:extremal}
@@ -217,8 +216,9 @@ $\{7,93\}$ and $\{43,57\}$.
 \begin{proof}
 There are $4\cdot 4=16$ such pairs, and for each the three conditions ($u^2+1$, $v^2+1$, $uv+1$ not
 squarefree by a local obstruction at $4$, $9$ or $25$) are decided by a direct computation modulo
-$900$. The enumeration was carried out by the author and independently by the referee of
-\cite{LeeRepo}, and also checked against all actual integer pairs up to $20000$.
+$900$. The enumeration was carried out by the author and independently by a referee whose report
+and code are distributed with \cite{LeeRepo}, and also checked against all actual integer pairs up
+to $20000$.
 \end{proof}
 
 \begin{remark}[The cross-class check by hand]\label{rem:hand100}
@@ -582,9 +582,9 @@ the non-$C$ signature groups, plus full-weight indicator variables), by the auth
 (\texttt{typebound.py});
 \item an exhaustive enumeration over the $64$ Galois-closed signature sets ($439$ valid pairs), with
 each candidate realized as an explicit type set and $F$ evaluated directly from its definition on all
-$900$ types (\texttt{opt\_closure.py}, referee);
+$900$ types (\texttt{opt\_closure.py}, independent referee);
 \item a HiGHS MILP on the reduced model with no-good cuts, enumerating \emph{all} optimal solutions and
-the next value below them (\texttt{opt\_milp\_reduced.py}, referee).
+the next value below them (\texttt{opt\_milp\_reduced.py}, independent referee).
 \end{enumerate}
 No brute-force search over subsets of $\Z/900\Z$ was performed, and none is needed. As a
 cross-validation, $3000$ random admissible configurations $S$ were evaluated directly and none
@@ -618,6 +618,30 @@ Sharpness is Proposition~\ref{prop:extremal}: $A_1$ and $A_2$ are admissible, me
 have $N/50+O(1)$ elements. That these are, within the mod-$900$ type framework, the only configurations
 attaining the bound is the uniqueness statement of Theorem~\ref{thm:opt}, together with
 Proposition~\ref{prop:only-two}.
+\end{proof}
+
+\begin{corollary}[Second-level stability]\label{cor:second}
+For every $\varepsilon>0$ there is $N_0(\varepsilon)$ such that for all $N\ge N_0(\varepsilon)$,
+if $A\subseteq[N]$ is admissible, contained in neither extremal class, and
+\[
+ |A|\ \ge\ \Bigl(\frac{72K_2'+828J'}{900}+\varepsilon\Bigr)N\ \approx\ (0.0171145+\varepsilon)N,
+\]
+then $A\subseteq A_1$ or $A\subseteq A_2$: a mixed admissible set above the runner-up density is
+contained in one of the two extremal configurations.
+\end{corollary}
+
+\begin{proof}
+Let $S$ be the type set of $A$, with configuration $(G_7,G_{18},Y)$. By
+Proposition~\ref{prop:pertype} applied with $\varepsilon/2$,
+$N\,F(S)\ge |A|-\frac{\varepsilon}{2}N-O(900)$, so
+$F(S)>(72K_2'+828J')/900$ for $N$ large. Apply the replacement of
+Lemma~\ref{lem:closure}: the closed configuration
+$\bigl(R(W_{18}),\, R(W_7),\, R(W_{18})\cap R(W_7)\bigr)$ has $F$ at least that of $S$, and its
+realized type set contains $S$. By Theorem~\ref{thm:opt}, the only closed configurations in
+$\Sigma$ with $F$ above the runner-up value $(72K_2'+828J')/900$ are the two maximizers $S_1$ and
+$S_2$ (the enumeration has no value strictly between the runner-up and $18/900$). Hence
+$S\subseteq S_1$ or $S\subseteq S_2$, and reading residues modulo $100$ gives $A\subseteq A_1$ or
+$A\subseteq A_2$.
 \end{proof}
 
 \section{Numerical evidence for small \texorpdfstring{$N$}{N}}\label{sec:small}
@@ -658,23 +682,32 @@ optimality (a dual/feasibility certificate in the $0$--$1$ program, and exhausti
 \end{enumerate}
 
 \paragraph{(B) The verified numerical range.}
-The explicit certificate described in Section~\ref{sec:small} was generated and then re-checked by a
-separate program. The generator emits, for each plateau of the relevant counting function, the
-plateau endpoints and the associated witness data; the checker re-reads this output and verifies each
-plateau independently of the generator's internal state, so that an error in the generator cannot be
-absorbed silently. The verification covers all
+A separate computation certifies the exact extremal bound of Theorem~\ref{thm:li} in a finite
+range, by an explicit ``seating-chart'' (colouring) certificate. The generator
+(\texttt{gen848.c}) emits, for each plateau of the counting function
+$N\mapsto\lfloor(N+18)/25\rfloor$, the plateau endpoints and the associated witness data; an
+independently written checker (\texttt{check848.c}, written from the format specification alone
+and using a different squarefree test) re-reads this output and verifies each plateau, so that an
+error in the generator cannot be absorbed silently. The conclusion certified is: for every
 \[
 N \le 9{,}999{,}981,
 \]
-comprising $399{,}999$ plateaus. The resulting artefacts have MD5 checksums
+comprising $399{,}999$ plateaus, every admissible $A\subseteq[1,N]$ satisfies
+$|A|\le\#\{n\le N:\ n\equiv 7\ (25)\}$. The certificate files have SHA-256 checksums
 \[
-\texttt{e5b8573a}\ \ (\text{global certificate}),\qquad
-\texttt{e3330948}\ \ (\text{plateau deltas}),
+\begin{aligned}
+\texttt{global:}\ &\texttt{caa830054e120c7743031f8a1a3ec299365638f7}\\
+&\texttt{a51b09a700baa9b5e54d94a1},\\
+\texttt{deltas:}\ &\texttt{e78da84a7cbe1469959bca822738c27581a732ed8a8bf4}\\
+&\texttt{df650a088f382a39d8},
+\end{aligned}
 \]
-quoted here by their leading bytes; the full checksums and both programs are distributed with the
-code (see (D) below). We stress that this computation does not enter the proof of
-Theorem~\ref{thm:main}: it is a consistency check on the constants and on the structure of the
-extremal configuration in the accessible range.
+(MD5: \texttt{e5b8573a1f1a0bc8bfe2a24651178195} and \texttt{e3330948328e523d101cd715af0f6a0a}
+respectively; the archive \texttt{certs\_1e7.tgz} containing them has SHA-256
+\texttt{680c3faa17589be8ba2772aa848103f1c499a928332d4696c6f5e3d7e87f804a}). Both programs are
+distributed with the code (see (D) below). We stress that this computation does not enter the
+proof of Theorem~\ref{thm:main}: it corroborates the exact value $f(N)$ of
+Theorem~\ref{thm:li} in the accessible range, independently of Li's formalization.
 
 \paragraph{(C) Independent rebuild of Li's formalization.}
 The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
@@ -686,7 +719,8 @@ kernel checks. Three points are worth recording.
 \begin{enumerate}
 \item \emph{Patch.} The repository as published did not compile against the toolchain we used; two
 declarations were missing the implicit binders they use, which the project's
-\texttt{autoImplicit = false} setting turns into a build stall; a two-line patch adds the binders
+\texttt{autoImplicit = false} setting turns into a build stall (the follow-on elaboration failure
+does not terminate, as that file sets \texttt{maxHeartbeats 0}); a two-line patch adds the binders
 $\{v\ w : \mathbb{N}\}$ and $\{w : \mathbb{N}\}$, with no change to any statement (the elaborated
 types are identical, checked with \texttt{pp.all}). The patch is included verbatim in our repository so that the discrepancy between the
 published source and the compiling source is visible rather than hidden.
