@@ -1,8 +1,8 @@
 # Erdős Problem #848 — stability claim, certificates, and independent verification of Li's proof
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23874488.svg)](https://doi.org/10.5281/zenodo.23874488)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23875371.svg)](https://doi.org/10.5281/zenodo.23875371)
 
-**Cite:** Paul J. Lee, *A sharp stability threshold for Erdős Problem 848: admissible sets not contained in a single extremal class have density at most 1/50*, Zenodo, 2026. https://doi.org/10.5281/zenodo.23874488
+**Cite:** Paul J. Lee, *A sharp stability threshold for Erdős Problem 848: admissible sets not contained in a single extremal class have density at most 1/50*, Zenodo, 2026. https://doi.org/10.5281/zenodo.23875371
 
 **Attribution first.** The all-$N$ proof of Erdős Problem #848 is due to
 **A. C. Li** ([crabsatellite/erdos-848-squarefree-product](https://github.com/crabsatellite/erdos-848-squarefree-product),

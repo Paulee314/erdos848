@@ -1,4 +1,4 @@
-> **Superseded.** The stability result is now written up in `paper/stability_note.pdf` (v1.0.0, DOI [10.5281/zenodo.23874488](https://doi.org/10.5281/zenodo.23874488)). This file is kept as the earlier record; where the two differ, the paper is authoritative.
+> **Superseded.** The stability result is now written up in `paper/stability_note.pdf` (v1.0.1, DOI [10.5281/zenodo.23875371](https://doi.org/10.5281/zenodo.23875371)). This file is kept as the earlier record; where the two differ, the paper is authoritative.
 
 # Erdős Problem 848: a sharp stability threshold (claim, v2 after review)
 
