@@ -428,7 +428,7 @@ generic $b$ & density of $D\wedge P_b$, no coincidences & $\approx 0.0012774$\\
 \end{tabular}
 \caption{The density constants. Enclosures were obtained from partial products over primes up to
 $P=5\cdot 10^{7}$ with rigorous tails (using $\sum_{n>P}n^{-2}<1/(P-1)$); the author's independent
-computation used $P=2\cdot 10^{7}$ and agrees to the printed digits.}
+computation used $P=2\cdot 10^{7}$ and agrees with these enclosures to within $2\cdot 10^{-7}$.}
 \label{tab:consts}
 \end{table}
 
@@ -600,7 +600,7 @@ particular the runner-up value is not the density of an admissible set, only the
 the all-types configuration (compare Section~\ref{sec:small}, where the largest admissible sets
 using types outside $C$ have about $0.0155N$ elements in the computed range).
 
-The optimum was computed in three independent ways:
+The optimum was computed in three ways, one by the author and two by an independent referee:
 \begin{enumerate}
 \item a CBC $0$--$1$ integer program on the reduced model ($72$ binary variables for $C$-types, $36$ for
 the non-$C$ signature groups, plus full-weight indicator variables), by the author
@@ -698,10 +698,11 @@ Proposition~\ref{prop:only-two}, were verified by direct enumeration: (F1) for a
 (F2) on $20{,}000$ random pairs, (F3) and the signature data on all $900\times 900$ type pairs, and
 the mod-$100$ cross-class pairs exhaustively (and against all integer pairs up to $20000$).
 \item \emph{The mod-$900$ maximization.} Theorem~\ref{thm:opt} is a finite computation, performed by
-the three independent solvers listed in Section~\ref{sec:opt} (CBC $0$--$1$ program; exhaustive
-enumeration over the $64$ Galois-closed candidate configurations; and an independent HiGHS MILP solve). The three solvers were written independently and share
-no code; they agree on the optimal value, on the extremal configuration, and on the certificate of
-optimality (a dual/feasibility certificate in the $0$--$1$ program, and exhaustion in the other two).
+the three programs listed in Section~\ref{sec:opt}: the author's CBC $0$--$1$ program, and two
+programs written separately by an independent referee (the exhaustive enumeration over the $64$
+Galois-closed candidate configurations, which relies on the closure reduction of
+Lemma~\ref{lem:closure}, and a HiGHS MILP solve). The author's program shares no code with the
+referee's; all three agree on the optimal value and on the extremal configurations.
 \end{enumerate}
 
 \paragraph{(B) The verified numerical range.}
@@ -740,9 +741,10 @@ with Mathlib and its dependencies taken from the official Mathlib build cache --
 kernel checks. Three points are worth recording.
 
 \begin{enumerate}
-\item \emph{Patch.} The repository as published did not compile against the toolchain we used; two
-declarations were missing the implicit binders they use, which the project's
-\texttt{autoImplicit = false} setting turns into a build stall (the follow-on elaboration failure
+\item \emph{Patch.} The repository as published builds with Li's own build driver, which compiles
+each file with \texttt{lake env lean} (where auto-bound implicit variables are allowed). A plain
+\texttt{lake build}, however, applies the project's \texttt{autoImplicit = false} setting, and two
+declarations rely on auto-bound implicit variables; under that setting the module stalls (the follow-on elaboration failure
 does not terminate, as that file sets \texttt{maxHeartbeats 0}); a two-line patch adds the binders
 $\{v\ w : \mathbb{N}\}$ and $\{w : \mathbb{N}\}$, with no change to any statement (the elaborated
 types are identical, checked with \texttt{pp.all}). The patch is included verbatim in our repository so that the discrepancy between the
@@ -766,9 +768,13 @@ Thus the theorem quoted from \cite{Li,LiRepo} is a machine-checked theorem whose
 have audited, not an informal assertion.
 
 \paragraph{(D) Availability.}
-All code described above --- the three mod-$900$ solvers, the enumeration scripts for (F1)--(F3) and
-for the signature reduction, the certificate generator and the independent certificate checker, the
-build and kernel-replay scripts for (C), and the binder patch --- is publicly available at
+All code described above is publicly available at the address below: in \texttt{stability/}, the
+author's and the referee's density computations, the referee's checks of (F1)--(F3), of the
+signature reduction and of the worst-case argument (\texttt{local\_facts.py},
+\texttt{closure\_crosscheck.py}, \texttt{worstcase\_local.py}, \texttt{consts.py}), the three
+mod-$900$ solvers and the small-$N$ clique computations; in \texttt{cert/}, the certificate generator
+and the independent certificate checker; and in \texttt{li-replay/}, the binder patch and the build,
+statement-check and kernel-replay scripts and logs for (C):
 \begin{center}
 \url{https://github.com/Paulee314/erdos848}
 \end{center}
@@ -788,6 +794,11 @@ Theorem~\ref{thm:sawhney} for every fixed $\eta<1/50$ (take $\varepsilon<1/50-\e
 Theorem~\ref{thm:main}), so the admissible $\eta$ is improved from $\approx 0.0023$ to anything
 below $1/50=0.02$. Finally, Theorem~\ref{thm:main} does not depend on the numerical range (B),
 which is reported as independent corroborating evidence.
+
+\section*{Acknowledgments}
+This work was carried out with substantial assistance from AI tools, which were used for the
+computations and code, for the independent referee check, and for drafting this note. The author
+directed the work and takes full responsibility for its content.
 
 \begin{thebibliography}{9}
 

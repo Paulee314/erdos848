@@ -1,3 +1,5 @@
+> **Superseded.** The stability result is now written up in `paper/stability_note.pdf` (v1.0.0, DOI [10.5281/zenodo.23874488](https://doi.org/10.5281/zenodo.23874488)). This file is kept as the earlier record; where the two differ, the paper is authoritative.
+
 We have two updates on Problem 848 (with the diagonal condition $a = b$ included, as in Sawhney's note): (1) an independent source rebuild and `leanchecker` kernel verification of A. C. Li's all-$N$ Lean 4 proof (plus explicit colouring certificates to $N = 10^7$), and (2) a referee-checked claim of the sharp $1/50$ structural stability threshold and its two extremal constructions.
 
 ### 1. Independent kernel verification of A. C. Li's all-$N$ Lean proof (and certificates to $N = 10^7$)
