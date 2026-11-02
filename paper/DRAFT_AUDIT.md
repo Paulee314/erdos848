@@ -53,6 +53,30 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
    one of which uses the reduction.)
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
+Sixth revision 2026-11-01: a full check by Claude Opus 5.5 (report in
+OPUS55_CHECK.md: ACCEPT WITH MINOR FIXES; proof of Theorem 1.4 found
+sound, constants and the 441/439 counts re-derived independently).
+Muse audited the report and confirmed its two mathematical catches:
+(i) Theorem (opt)'s runner-up sentence was false over all type sets -
+S_1 minus one type has F = 17/900 > 15.40304/900 (recomputed with
+F_direct) - now restricted to Galois-closed configurations, which is
+all the proof and corollary use; (ii) the explicit N_0 exponent was
+wrong: log10(e^2033200) = 883007.54, so N_0(1/100) <= 10^883008 (not
+10^883006), the epsilon range is restricted to [10^-100, 1/100] with
+an O(eps^-1 log(1/eps)) note for smaller epsilon, and the CRT product
+is renamed Q_T (it clashed with Lemma (J')'s Euler product Q). Also
+fixed per the report: abstract and the effectivity remark reconciled
+with the explicit N_0 (the remark is retitled "Effectivity"); Li's
+theorem no longer called an "input" (Sec. 1.2, Sec. 9); the
+early-draft 15/16 footnote and two stale TODO comments deleted;
+Sec. 6.2 source comment corrected; "Mathlib foundation" -> "Lean
+itself" for the three axioms; bibliography entries added for the two
+GitHub repositories cited in the prior-work remark and the
+novelty-search process sentence removed; Prop. (finite check) now
+states the integer check exhibits squarefree witnesses; the abstract
+now says "439 compatible pairs of Galois-closed signature sets".
+PDF genuinely rebuilt (13 pp) and verified by full-text diff against
+the previous build - differences are exactly these edits.
 Outcome (2026-11-01): the critical (referee-style) review accepted
 the changes; no review items remain open. The note stands as a final
 draft; the submission venue is the author's pending decision.

@@ -41,15 +41,17 @@ large $N$ every admissible set of size at least $(1/25-\eta)N$ lies inside one o
 he left open the structure of admissible sets of smaller density. We close that gap in sharp form.
 We prove that for every $\varepsilon>0$ and all $N\ge N_0(\varepsilon)$, every admissible
 $A\subseteq\{1,\dots,N\}$ which is \emph{not} contained in a single one of the two classes satisfies
-$|A|\le (1/50+\varepsilon)N$, and that the constant $1/50$ is sharp, attained exactly by the two
+$|A|\le (1/50+\varepsilon)N$, and that the constant $1/50$ is sharp, attained by the two
 residue-class constructions $\{n:\ n\equiv 7,93 \pmod{100}\}$ and $\{n:\ n\equiv 43,57\pmod{100}\}$.
 The proof combines uniform analytic density bounds for the relevant squarefree-sieve events with two
 explicit finite computations, both described in the paper: the determination of the divisibility
 (``gluing'') relation on residues modulo $900$, and the maximization of the resulting weighted
-objective by $0$--$1$ programming together with an exhaustive enumeration over the $64$ Galois-closed
-signature sets. The argument is self-contained: it uses neither Li's theorem nor Sawhney's, and it
+objective by $0$--$1$ programming together with an exhaustive enumeration over the $439$ compatible
+pairs of Galois-closed signature sets. The argument is self-contained: it uses neither Li's theorem
+nor Sawhney's, and it
 implies Sawhney's stability statement for every fixed $\eta<1/50$; Li's theorem is quoted only for
-the exact extremal value $f(N)$ attained inside a single class. No explicit $N_0$ is claimed.
+the exact extremal value $f(N)$ attained inside a single class. The argument is effective; an
+explicit (very weak) $N_0(\varepsilon)$ is recorded in Remark~\ref{rem:explicitN0}.
 \end{abstract}
 
 \section{Introduction}
@@ -92,7 +94,8 @@ For every $N\ge 1$,
 
 Theorem~\ref{thm:li} is proved in \cite{Li} by an exact prefix colouring for $N\le 5\cdot 10^{6}$
 combined with a Hall-defect sieve argument for larger $N$, and is formalized in Lean~4 in the
-accompanying repository. It is an \emph{input} to the present note: we neither reprove nor modify it.
+accompanying repository. It is quoted here for context only: the proof of
+Theorem~\ref{thm:main} neither uses, reproves, nor modifies it.
 (Section~\ref{sec:verif} records an independent source rebuild and external kernel replay of that
 formalization, performed by the present author; that work verifies Li's theorem and is logically
 separate from the theorem proved here.)
@@ -134,16 +137,17 @@ $\varepsilon$: an admissible set either sits inside one extremal class (where it
 $\lfloor (N+18)/25\rfloor$, with equality for the class itself), or it has density at most
 $1/50+\varepsilon$, and the latter bound is attained.
 
-\begin{remark}[Ineffectivity]\label{rem:ineff}
-No explicit $N_0(\varepsilon)$ is claimed anywhere in this note. The density bounds of
+\begin{remark}[Effectivity]\label{rem:ineff}
+The density bounds of
 Section~\ref{sec:dens} are stated in an $\varepsilon$--$T$--$N_0$ form in which the truncation
 parameter $T=T(\varepsilon)$ and then $N_0$ are chosen but not tracked. This is a matter of
 convenience rather than of principle: the tail estimate of Lemma~\ref{lem:trunc} is elementary
 (it uses only $q^{2}\le ab+1\le N^{2}+1$ for the prime squares $q^{2}$ in question), and the
 remaining ingredients are the finite congruence computations of
-Sections~\ref{sec:types} and~\ref{sec:opt}. An explicit $N_0(\varepsilon)$ could therefore be
-extracted by tracking $T(\varepsilon)$, the tail sum over primes $q>T$, and the $O_T(1)$ CRT
-error; we do not carry this out. We stress that the proof of Theorem~\ref{thm:main} is logically
+Sections~\ref{sec:types} and~\ref{sec:opt}. The argument is therefore effective, and
+Remark~\ref{rem:explicitN0} below extracts an explicit (extremely weak) $N_0(\varepsilon)$ by
+tracking $T(\varepsilon)$, the tail sum over primes $q>T$, and the $O_T(1)$ CRT
+error. We stress that the proof of Theorem~\ref{thm:main} is logically
 independent of \cite{Sawhney}: no estimate of Sawhney's is used, and no ineffectivity is inherited
 from it. Li's theorem \cite{Li} is likewise not used in the proof of Theorem~\ref{thm:main}; it is
 quoted only for the exact extremal value $f(N)=\lfloor (N+18)/25\rfloor$ inside a single extremal
@@ -157,14 +161,18 @@ moves the constants $K_2'$ and $J'$ by at most $8/T$ (each product tail is at mo
 $2\sum_{q>T}q^{-2}\le 2/T$), so $T=\lceil 24/\varepsilon\rceil$ makes the density error at most
 $\varepsilon/3$ and also gives $3/T\le\varepsilon/3$ for the main term of
 Lemma~\ref{lem:trunc}; the remaining error terms are the $3\pi(N)$ of that lemma and the CRT
-error, which is at most the number $Q=\prod_{7\le q\le T}q^{2}\le e^{2T\log T}$ of residue classes
+error, which is at most the number $Q_T=\prod_{7\le q\le T}q^{2}\le e^{2T\log T}$ of residue classes
 involved. By Rosser's bound $\pi(x)<1.25506\,x/\log x$, the condition
-$\log N\ge 20332/\varepsilon$ makes $3\pi(N)\le\varepsilon N/(6M)$ and also implies
-$Q\le\varepsilon N/(6M)$ for $\varepsilon\le 1/100$. Hence one may take
+$\log N\ge 20332/\varepsilon$ makes $3\pi(N)\le\varepsilon N/(6M)$; it also implies
+$Q_T\le\varepsilon N/(6M)$ provided $10^{-100}\le\varepsilon\le 1/100$, since
+$\log Q_T\le 2T\log T$ with $T=\lceil 24/\varepsilon\rceil$ and
+$2T\log T\le 20332/\varepsilon-\log(6M/\varepsilon)$ throughout that range (for smaller
+$\varepsilon$ the same tracking gives $\log N_0(\varepsilon)=O(\varepsilon^{-1}\log(1/\varepsilon))$).
+Hence one may take
 \[
- N_0(\varepsilon)=\exp\bigl(20332/\varepsilon\bigr)\qquad(\varepsilon\le 1/100),
+ N_0(\varepsilon)=\exp\bigl(20332/\varepsilon\bigr)\qquad(10^{-100}\le\varepsilon\le 1/100),
 \]
-and in particular $N_0(1/100)\le 10^{883006}$. These values are of course far from optimal; we
+and in particular $N_0(1/100)\le 10^{883008}$. These values are of course far from optimal; we
 record them only to show that an explicit threshold can be extracted from the argument.
 \end{remark}
 
@@ -178,9 +186,9 @@ configuration $\{7,93\}\pmod{100}$ (and its mirror $\{43,57\}\pmod{100}$) is adm
 density exactly $1/50$, and (ii) the matching sharp upper bound of Theorem~\ref{thm:main}, obtained by
 reducing all mixed configurations to the single numerical inequality $72K_2'+828J'<18$ of
 Section~\ref{sec:opt}. Other community bounds in circulation are weaker: $\approx 0.0276$
-(bzanghi/erdos-848) and an existential $\eta=1/2000$ in the Lean work of
-The-Obstacle-Is-The-Way/erdos-banger. A novelty search carried out on 27 October 2026 found neither
-the $1/50$ threshold nor the two constructions stated anywhere.
+\cite{Bzanghi} and an existential $\eta=1/2000$ in the Lean work of
+\cite{Obstacle}. Neither the $1/50$ threshold nor the two constructions are stated in any of the
+works cited in this remark.
 \end{remark}
 
 \section{The extremal configurations}\label{sec:extremal}
@@ -218,13 +226,16 @@ There are $4\cdot 4=16$ such pairs, and for each the three conditions ($u^2+1$, 
 squarefree by a local obstruction at $4$, $9$ or $25$) are decided by a direct computation modulo
 $900$. The enumeration was carried out by the author and independently by a referee whose report
 and code are distributed with \cite{LeeRepo}, and also checked against all actual integer pairs up
-to $20000$.
+to $20000$: for each of the remaining fourteen pairs that check exhibits explicit elements
+$a,b$ with $ab+1$ squarefree, so those class pairs are genuinely inadmissible and not merely
+unobstructed.
 \end{proof}
 
 \begin{remark}[The cross-class check by hand]\label{rem:hand100}
 The cross-class part of the computation above can also be done by hand. Let $u\equiv 7\ (25)$ and
 $v\equiv 18\ (25)$. Then $uv+1\equiv 7\cdot 18+1=127\equiv 2\ (25)$, so $25\nmid uv+1$, and the only
-prime square that can obstruct $uv+1$ for all such $u,v$ is $4$. Hence we need
+prime square that can obstruct $uv+1$ for every choice of integers $u,v$ in these classes is $4$.
+Hence we need
 $uv\equiv 3\ (4)$, i.e.\ $\{u\bmod 4,\ v\bmod 4\}=\{1,3\}$. Modulo $100$ the relevant residues are
 $u\in\{7,32,57,82\}$, with $u\equiv 3,0,1,2\ (4)$ respectively, and $v\in\{18,43,68,93\}$, with
 $v\equiv 2,3,0,1\ (4)$ respectively. The only pairs with $uv\equiv 3\ (4)$ are therefore
@@ -335,9 +346,7 @@ independent by CRT. Hence the truncated density of $P_b$ is
 $1-\prod_{7\le q\le T,\,q\nmid b}(1-q^{-2})\le 1-\prod_{7\le q\le T}(1-q^{-2})$, and letting
 $T\to\infty$ in the majorant gives $K_2'$. Finally
 $\prod_{q\ge 7}(1-q^{-2})=\bigl(6/\pi^2\bigr)\big/\bigl(\tfrac34\cdot\tfrac89\cdot\tfrac{24}{25}\bigr)
-=9.375/\pi^2$, since $\tfrac34\cdot\tfrac89\cdot\tfrac{24}{25}=0.64$.\footnote{%
-This closed form, $K_2'=1-9.375/\pi^2$, is the correct one; an expanded product form containing a
-spurious factor $15/16$ appeared in an early draft of this note and should be disregarded.}
+=9.375/\pi^2$, since $\tfrac34\cdot\tfrac89\cdot\tfrac{24}{25}=0.64$.
 Apply Lemma~\ref{lem:trunc}.
 \end{proof}
 
@@ -392,10 +401,6 @@ $\prod Y=A_{\Dset}$, $\prod X=Q\,B_{\Dset}=1-K_2'$ and $\prod Z=Q\,A_{\Dset}$, g
 \]
 Finally $s\notin C$ guarantees, by (F1), that non-squarefreeness of $a^2+1$ is exactly the event $D(a)$,
 so the bound is applicable. Apply Lemma~\ref{lem:trunc}.
-% TODO(author): the per-prime sign computation above, together with the finite CRT-period checks
-% reported below, is exactly what the source material establishes; a fully written-out global
-% monotonicity induction over all primes is not present in the sources and should be supplied in a
-% final version.
 \end{proof}
 
 The product formula underlying Lemma~\ref{lem:J} was checked exactly against full CRT-period counts on
@@ -564,8 +569,9 @@ The total is $1+1+12+12+30+6+2=64$, in agreement with the enumeration.
 
 % Note: the enumeration behind the count above is implemented in opt_closure.py (which verifies
 % R(R(X)) = X for each enumerated closed set and cross-validates F against its definition on all
-% 900 types, including 3000 random type sets). The computational conclusions of Theorem 6.2 below
-% were obtained by three independent solvers, only one of which uses the reduction.
+% 900 types, including 3000 random type sets). The computational conclusions of the theorem below
+% were obtained by three independent solvers: two 0--1 programs on the reduced model and the
+% exhaustive enumeration over the Galois-closed sets.
 
 \subsection{The computation and its outcome}
 
@@ -577,8 +583,9 @@ and the maximum is attained by exactly two configurations, namely
 \[
  S_1=\{s:\ s\bmod 100\in\{7,93\}\},\qquad S_2=\{s:\ s\bmod 100\in\{43,57\}\},
 \]
-each consisting of $18$ types, all of weight $f(s,S_i)=1$. The second largest value of $F$ is
-attained at the configuration $S=\Z/900\Z$ (all types present) and equals
+each consisting of $18$ types, all of weight $f(s,S_i)=1$. Among the Galois-closed
+configurations, the second largest value of $F$ is attained at $S=\Z/900\Z$ (all types present)
+and equals
 \[
  \frac{72K_2'+828J'}{900}=\frac{3.60820+11.79484}{900}=\frac{15.40304}{900}\approx 0.0171145<\frac{1}{50};
 \]
@@ -680,7 +687,7 @@ Theorem~\ref{thm:opt}.
 
 \section{Computational components and verification status}\label{sec:verif}
 
-We separate clearly what is computed, what is verified, and what is taken as an input.
+We separate clearly what is computed, what is verified, and what is quoted as context.
 
 \paragraph{(A) Finite computations entering the proof of Theorem~\ref{thm:main}.}
 \begin{enumerate}
@@ -695,8 +702,6 @@ the three independent solvers listed in Section~\ref{sec:opt} (CBC $0$--$1$ prog
 enumeration over the $64$ Galois-closed candidate configurations; and an independent HiGHS MILP solve). The three solvers were written independently and share
 no code; they agree on the optimal value, on the extremal configuration, and on the certificate of
 optimality (a dual/feasibility certificate in the $0$--$1$ program, and exhaustion in the other two).
-% TODO(author): state explicitly which $6$-element Galois orbit structure the $64 = 2^6$ Galois-closed
-% configurations enumerate, so that the second solver's search space is reproducible from the text alone.
 \end{enumerate}
 
 \paragraph{(B) The verified numerical range.}
@@ -728,7 +733,7 @@ proof of Theorem~\ref{thm:main}: it corroborates the exact value $f(N)$ of
 Theorem~\ref{thm:li} in the accessible range, independently of Li's formalization.
 
 \paragraph{(C) Independent rebuild of Li's formalization.}
-The input Theorem~\ref{thm:li} relies on the Lean formalization of Li
+Theorem~\ref{thm:li} relies on the Lean formalization of Li
 \cite{Li,LiRepo}. We did not take the published build artefacts on trust. Instead we rebuilt the
 project --- the $30{,}636$ \texttt{Erdos848} modules behind the final theorem compiled from source,
 with Mathlib and its dependencies taken from the official Mathlib build cache --- and replayed the
@@ -750,14 +755,14 @@ the build for the final theorem.)
 \[
 \texttt{[propext, Classical.choice, Quot.sound]},
 \]
-i.e.\ the three standard axioms of Lean's \texttt{Mathlib} foundation and nothing further --- in
+i.e.\ the three standard axioms of Lean itself and nothing further --- in
 particular no \texttt{sorryAx} and no unverified native-code evaluation axiom. Independently, a run
 of \texttt{leanchecker} over the compiled environment re-checked the $30{,}636$ project modules
 with $0$ failures (Mathlib itself was not replayed), so the proof terms were re-run through the
 Lean kernel rather than merely accepted from the compiler's cache.
 \end{enumerate}
 
-Thus the input we take from \cite{Li,LiRepo} is a machine-checked theorem whose dependency set we
+Thus the theorem quoted from \cite{Li,LiRepo} is a machine-checked theorem whose dependency set we
 have audited, not an informal assertion.
 
 \paragraph{(D) Availability.}
@@ -816,6 +821,16 @@ AstroCat93,
 P.~J.~Lee,
 \emph{erdos848}: solvers, certificates and verification scripts, 2026.
 \url{https://github.com/Paulee314/erdos848}.
+
+\bibitem{Bzanghi}
+bzanghi,
+\emph{erdos-848} (GitHub repository).
+\url{https://github.com/bzanghi/erdos-848}.
+
+\bibitem{Obstacle}
+The-Obstacle-Is-The-Way,
+\emph{erdos-banger} (GitHub repository; Lean formalization work).
+\url{https://github.com/The-Obstacle-Is-The-Way/erdos-banger}.
 
 \end{thebibliography}
 
