@@ -53,6 +53,9 @@ AUDIT_MEMO_2026-11-01.md), then audited by Muse against those sources.
    one of which uses the reduction.)
 4. Sawhney's reference lacks full bibliographic data in the sources.
 
+Outcome (2026-11-01): the critical (referee-style) review accepted
+the changes; no review items remain open. The note stands as a final
+draft; the submission venue is the author's pending decision.
 Fifth revision 2026-11-01: three clarifications from a referee-style
 review (whose items 1-4 again concerned the stale first-build PDF and
 were already fixed): (i) Lemma (J') proof now states explicitly that
